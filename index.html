@@ -237,115 +237,66 @@ const rows=Object.entries(need).map(([id,q])=>{const i=ins(id);if(!i)return null
 return head('Planificador de compras','La lista de insumos que necesitas para lo que enviarás a vitrina y los pedidos confirmados de la semana.')+`
 <div class="card"><form class="row"><label style="max-width:200px">Desde<input type="date" id="ci" value="${ui.ci}"></label><label style="max-width:200px">Hasta<input type="date" id="cf" value="${ui.cf}"></label></form></div>
 <div class="card tw">${rows.length?`<table><thead><tr><th>Insumo</th><th>Necesitas</th><th>Comprar</th><th>Costo</th></tr></thead><tbody>${rows.map(x=>`<tr><td>${nm(x.i,esc(x.i.n))}</td><td>${Math.round(x.rq)} ${U[x.i.u][1]}</td><td>${x.n} × ${x.i.c} ${x.i.u}</td><td>${m(x.c)}</td></tr>`).join('')}</tbody><tfoot><tr><td colspan="3">Presupuesto de compras</td><td>${m(T)}</td></tr></tfoot></table>`:'<p class="empty">No hay envíos a vitrina sin liquidar ni pedidos confirmados en esas fechas.</p>'}<p class="mu" style="margin-bottom:0">Incluye 3% extra por desperdicio. Esta versión no descuenta lo que ya tienes en bodega.</p></div>`};
-const peH=(k,r)=>{const vs=S.ven.filter(v=>v.f.startsWith(k)),b=vs.length?vs:S.ven,u=b.reduce((a,v)=>a+v.c,0)||1,mc=b.reduce((a,v)=>a+v.c*(v.pr-v.cu),0)/u,pr=b.reduce((a,v)=>a+v.c*v.pr,0)/u,cf=S.gas.filter(x=>x.f.startsWith(k)&&x.tipo!=='VARIABLE').reduce((a,x)=>a+x.m,0)+r.dep,vend=vs.reduce((a,v)=>a+v.c,0);
-if(mc<=0)return'<div class="card"><h3>Punto de equilibrio</h3><p class="neg">No alcanzable: revisa tus precios o comisiones.</p></div>';
-const pe=Math.max(1,Math.ceil(cf/mc));return`<div class="card"><h3>Punto de equilibrio</h3><div class="grid" style="margin:0"><div class="k"><span>Costos fijos del mes</span><b>${m(cf)}</b></div><div class="k"><span>Ganancia promedio por postre</span><b>${m(mc)}</b></div><div class="k"><span>Debes vender para no perder</span><b>${pe} porciones</b></div><div class="k"><span>Ventas reales este mes</span><b class="${vend>=pe?'pos':'neg'}">${vend} porciones</b></div></div></div>`};
-V.gas=()=>{const v=[...S.gas].sort((a,b)=>b.f.localeCompare(a.f));
-return head('Gastos generales','Alquiler, luz, agua, internet, transporte y otros gastos del negocio.')+`
-<div class="card"><h3>Nuevo gasto</h3><form class="row" data-f="gas"><label>Fecha<input name="f" type="date" value="${today()}" required></label><label style="flex:2">Descripción<input name="n" required></label><label>Monto<input name="m" type="number" step="any" min="0" required></label><label>Tipo<select name="tipo"><option value="FIJO">Fijo (alquiler, servicios)</option><option value="VARIABLE">Variable (transporte, imprevistos)</option></select></label><button class="p">Agregar</button></form></div>
-<div class="card tw">${v.length?`<table><thead><tr><th>Fecha</th><th>Descripción</th><th>Tipo</th><th>Monto</th><th></th></tr></thead><tbody>${v.map(x=>`<tr><td>${fd8(x.f)}</td><td>${esc(x.n)}</td><td>${x.tipo}</td><td>${m(x.m)}</td><td><button class="l" data-a="delGas" data-id="${x.id}">Eliminar</button></td></tr>`).join('')}</tbody></table>`:'<p class="empty">Sin gastos registrados.</p>'}</div>`};
-V.res=()=>{const k=ui.mes,r=R(x=>x.f.startsWith(k),k);
-return head('Resumen mensual','Selecciona un mes para ver tu balance detallado.')+`
-<div class="card"><form class="row"><label style="max-width:200px">Mes<input type="month" id="rmes" value="${k}"></label></form></div>
-<div class="card tw"><h3>Estado de resultados de ${mesN(k)}</h3>${edr(r)}</div>${peH(k,r)}`};
-function renderNav(){$('#nav').innerHTML=T.map(([id,t])=>`<button class="${id===ui.tab?'on':''}" data-tab="${id}">${t}</button>`).join('')}
-function render(){renderNav();$('#main').innerHTML=V[ui.tab]();if(ui.tab==='costos')simUpd();if(ui.tab==='ped')cotUpd()}
-document.addEventListener('click',e=>{
-  const b=e.target.closest('button, [data-tab]');if(!b)return;
-  if(b.dataset.tab){ui.tab=b.dataset.tab;render();return}
-  const a=b.dataset.a,id=b.dataset.id;
-  if(a==='close')dlg.close();
-  if(a==='editIns'){ui.eIns=id;render()}
-  if(a==='cancelIns'){ui.eIns=null;render()}
-  if(a==='delIns'){S.ins=S.ins.filter(i=>i.id!==id);save();render()}
-  if(a==='delInv'){S.inv=S.inv.filter(i=>i.id!==id);save();render()}
-  if(a==='delGas'){S.gas=S.gas.filter(i=>i.id!==id);save();render()}
-  if(a==='delVen'){S.ven=S.ven.filter(i=>i.id!==id);save();render()}
-  if(a==='delPun'){S.pun=S.pun.filter(i=>i.id!==id);save();render()}
-  if(a==='delSal'){S.sal=S.sal.filter(i=>i.id!==id);save();render()}
-  if(a==='delPed'){S.ped=S.ped.filter(i=>i.id!==id);save();render()}
-  if(a==='newPos')openPos();
-  if(a==='ver')openPos(id);
-  if(a==='liq')liq(id);
-  if(a==='pagoD')pagoD(id);
-  if(a==='conf'){const p=S.ped.find(x=>x.id===id);if(p){p.est='CONFIRMADO';save();render()}}
-  if(a==='ent'){const p=S.ped.find(x=>x.id===id);if(p){p.est='ENTREGADO';S.ven.push({id:uid(),f:today(),p:p.p,c:p.por,pr:p.pf/p.por,cu:calc(pp(p.p)).porc});save();render()}}
-});
-document.addEventListener('input',e=>{
-  if(e.target.dataset.sim){ui.sim[e.target.dataset.sim]=e.target.value;simUpd()}
-  if(e.target.id==='vp'){const p=S.pos.find(x=>x.id===e.target.value);if(p&&$('#vpr'))$('#vpr').value=calc(p).precio.toFixed(2)}
-  if(e.target.id==='sp'||e.target.id==='spu'){const p=S.pos.find(x=>x.id===$('#sp')?.value),u=S.pun.find(x=>x.id===$('#spu')?.value);if(p&&u&&$('#spvp'))$('#spvp').value=pvpV(p,u.k).toFixed(2)}
-  if(e.target.closest('[data-f=ped]'))cotUpd();
-  if(e.target.id==='rmes'){ui.mes=e.target.value;render()}
-  if(e.target.id==='ci'){ui.ci=e.target.value;render()}
-  if(e.target.id==='cf'){ui.cf=e.target.value;render()}
-});
-const readF=f=>new Promise(r=>{if(!f)return r('');const rd=new FileReader();rd.onload=()=>r(rd.result);rd.readAsDataURL(f)});
-document.addEventListener('submit',async e=>{
-  e.preventDefault();const form=e.target,f=form.dataset.f,d=Object.fromEntries(new FormData(form));
-  if(f==='cfg'){S.cfg.cap=+d.cap||0;S.cfg.mar=+d.mar||0;S.cfg.tar=+d.tar||0;S.cfg.mp=+d.mp||0;S.cfg.mon=d.mon||'S/';save();render()}
-  if(f==='ins'){const img=form.foto?.files[0]?await readF(form.foto.files[0]):(S.ins.find(i=>i.id===d.id)?.img||'');if(d.id){const i=S.ins.find(x=>x.id===d.id);Object.assign(i,{n:d.n,c:+d.c,u:d.u,precio:+d.p,img});ui.eIns=null}else S.ins.push({id:uid(),n:d.n,c:+d.c,u:d.u,precio:+d.p,img});save();render()}
-  if(f==='inv'){const img=form.foto?.files[0]?await readF(form.foto.files[0]):'';S.inv.push({id:uid(),f:d.f,n:d.n,m:+d.m,vu:+d.vu||36,img});save();render()}
-  if(f==='gas'){S.gas.push({id:uid(),f:d.f,n:d.n,m:+d.m,tipo:d.tipo});save();render()}
-  if(f==='ven'){const p=S.pos.find(x=>x.id===d.p);S.ven.push({id:uid(),f:d.f,p:d.p,c:+d.c,pr:+d.pr,cu:calc(p).porc});save();render()}
-  if(f==='pun'){S.pun.push({id:uid(),n:d.n,k:+d.k});save();render()}
-  if(f==='sal'){S.sal.push({id:uid(),f:d.f,pu:d.pu,p:d.p,c:+d.c,pvp:+d.pvp,v:0,m:0,d:0});save();render()}
-  if(f==='liq'){const s=S.sal.find(x=>x.id===d.id),v=+d.v||0,mm=+d.mm||0,dev=+d.d||0;s.v+=v;s.m+=mm;s.d+=dev;if(v>0)S.ven.push({id:uid(),f:today(),p:s.p,c:v,pr:s.pvp*(1-pu(s.pu).k/100),cu:calc(pp(s.p)).porc,com:s.pvp*(pu(s.pu).k/100)});if(mm>0)S.mer.push({id:uid(),f:today(),p:s.p,c:mm,cos:mm*calc(pp(s.p)).porc});save();dlg.close();render()}
-  if(f==='ped'){const p=S.pos.find(x=>x.id===d.p),q=cotz(p,+d.por||0,+d.h||0,+d.ex||0,!!d.u),pf=+d.pf||q.P;S.ped.push({id:uid(),cl:d.cl,fe:d.fe,p:d.p,por:+d.por,h:+d.h,ex:+d.ex,u:!!d.u,pf,est:'COTIZADO',pag:[]});save();render()}
-  if(f==='pago'){const p=S.ped.find(x=>x.id===d.id);p.pag.push({f:today(),m:+d.m});if(p.est==='COTIZADO')p.est='CONFIRMADO';save();dlg.close();render()}
-  if(f==='pos'){
-    const ings=[];form.querySelectorAll('.ir').forEach(r=>{const i=r.querySelector('select').value,c=+r.querySelector('input').value||0;if(c>0)ings.push({i,c})});
-    const img=form.foto?.files[0]?await readF(form.foto.files[0]):(S.pos.find(x=>x.id===d.id)?.img||'');
-    const data={n:d.n,porc:+d.porc||1,emp:+d.emp||0,otros:+d.otros||0,mar:+d.mar||0,precio:+d.precio||0,pasos:d.pasos,ings,img};
-    if(d.id){const p=S.pos.find(x=>x.id===d.id);Object.assign(p,data)}else S.pos.push({id:uid(),...data});
-    save();dlg.close();render();
-  }
-});
-function openPos(id){
-  const p=S.pos.find(x=>x.id===id)||{id:'',n:'',porc:8,emp:0.3,otros:2,mar:S.cfg.mar,precio:0,pasos:'',ings:[{i:S.ins[0]?.id||'',c:100}],img:''};
-  const c=calc(p);
-  dlg.innerHTML=`
-  <div class="dh"><h2>${p.id?esc(p.n):'Nuevo postre'}</h2><button class="x" data-a="close" aria-label="Cerrar">✕</button></div>
-  <form data-f="pos">
-    <input type="hidden" name="id" value="${p.id}">
-    <div class="row">
-      <label style="flex:2">Nombre del postre<input name="n" value="${esc(p.n)}" required></label>
-      <label>Porciones por receta<input name="porc" type="number" min="1" value="${p.porc}" required></label>
-      <label>Foto (opcional)<input name="foto" type="file" accept="image/*"></label>
-    </div>
-    <h3>Ingredientes</h3>
-    <div id="il">${p.ings.map((r,idx)=>irH(r,idx)).join('')}</div>
-    <button type="button" class="s" id="addI" style="margin-bottom:12px">+ Agregar ingrediente</button>
-    <div class="row">
-      <label>Empaque por porción<input name="emp" type="number" step="any" min="0" value="${p.emp}"></label>
-      <label>Gas/mano de obra (por receta)<input name="otros" type="number" step="any" min="0" value="${p.otros}"></label>
-      <label>Margen de ganancia (%)<input name="mar" type="number" min="0" value="${p.mar}"></label>
-      <label>Precio de venta manual (opcional)<input name="precio" type="number" step="any" min="0" value="${p.precio||''}"></label>
-    </div>
-    <h3>Preparación</h3>
-    <textarea name="pasos" rows="4" placeholder="Pasos para preparar este postre...">${esc(p.pasos)}</textarea>
-    ${p.id?`<div class="sum">
-      <span>Costo de insumos:</span><b>${m(c.insumos)}</b>
-      <span>Costo total receta:</span><b>${m(c.total)}</b>
-      <span>Costo por porción:</span><b>${m(c.porc)}</b>
-      <span>Precio ideal por porción:</span><b>${m(c.ideal)}</b>
-      <span>Precio cobrado:</span><b>${m(c.precio)}</b>
-      <span>Ganancia por porción:</span><b class="${cls(c.gan)}">${m(c.gan)}</b>
-    </div>`:''}
-    <div class="act">
-      ${p.id?`<button type="button" class="dg" id="delP" data-id="${p.id}">Eliminar postre</button>`:''}
-      <button class="p">Guardar postre</button>
-    </div>
-  </form>`;
-  dlg.showModal();
-  $('#addI').onclick=()=>{const div=document.createElement('div');div.innerHTML=irH({i:S.ins[0]?.id||'',c:100});$('#il').appendChild(div.firstElementChild)};
-  dlg.onclick=e=>{
-    if(e.target.classList.contains('delI'))e.target.closest('.ir').remove();
-    if(e.target.id==='delP'){S.pos=S.pos.filter(x=>x.id!==e.target.dataset.id);save();dlg.close();render()}
-  };
+const peH=(k,r)=>{const vs=S.ven.filter(v=>v.f.startsWith(k)),b=vs.length?vs:S.ven,u=b.reduce((a,v)=>a+v.c,0)||1,mc=b.reduce((a,v)=>a+v.c*(v.pr-v.cu),0)/u,pr=b.reduce((a,v)=>a+v.c*v.pr,0)/u,cf=S.gas.filter(x=>x.f.startsWith(k)&&x.tipo!=='VARIABLE').reduce((a,x)=>a+x.m,0)+r.dep,vend=vs.reduce((a,v)=>a+v.c,0);return{mc,pr,cf,pe:mc>0?Math.ceil(cf/mc):0,vend}};
+
+function render(){
+  $('#nav').innerHTML=T.map(([k,t])=>`<button class="${ui.tab===k?'on':''}" data-t="${k}">${t}</button>`).join('');
+  $('#main').innerHTML=(V[ui.tab]||V.panel)();
+  if(ui.tab==='costos')simUpd();
+  if(ui.tab==='ped')cotUpd();
 }
-function irH(r={}){return`<div class="ir"><select>${S.ins.map(i=>`<option value="${i.id}" ${i.id===r.i?'selected':''}>${esc(i.n)} (${i.c}${i.u})</option>`).join('')}</select><input type="number" step="any" min="0" value="${r.c||''}" placeholder="Cant." required><button type="button" class="x delI">✕</button></div>`}
-render();
+
+document.addEventListener('click',e=>{
+  const t=e.target.closest('[data-t]');if(t){ui.tab=t.dataset.t;render();return}
+  const a=e.target.closest('[data-a]');if(!a)return;
+  const act=a.dataset.a,id=a.dataset.id;
+  if(act==='editIns'){ui.eIns=id;render()}
+  else if(act==='cancelIns'){ui.eIns=null;render()}
+  else if(act==='delIns'){S.ins=S.ins.filter(i=>i.id!==id);save();render()}
+  else if(act==='delVen'){S.ven=S.ven.filter(v=>v.id!==id);save();render()}
+  else if(act==='delInv'){S.inv=S.inv.filter(x=>x.id!==id);save();render()}
+  else if(act==='delPun'){S.pun=S.pun.filter(x=>x.id!==id);save();render()}
+  else if(act==='delSal'){S.sal=S.sal.filter(x=>x.id!==id);save();render()}
+  else if(act==='delPed'){S.ped=S.ped.filter(x=>x.id!==id);save();render()}
+  else if(act==='liq')liq(id);
+  else if(act==='pagoD')pagoD(id);
+  else if(act==='conf'){const p=S.ped.find(x=>x.id===id);if(p){p.est='CONFIRMADO';save();render()}}
+  else if(act==='ent'){const p=S.ped.find(x=>x.id===id);if(p){p.est='ENTREGADO';save();render()}}
+  else if(act==='close')dlg.close();
+});
+
+document.addEventListener('submit',e=>{
+  const f=e.target.closest('[data-f]');if(!f)return;
+  e.preventDefault();
+  const d=Object.fromEntries(new FormData(f)),k=f.dataset.f;
+  if(k==='cfg'){S.cfg.cap=+d.cap;S.cfg.mar=+d.mar;S.cfg.tar=+d.tar;S.cfg.mp=+d.mp;S.cfg.mon=d.mon;save();render()}
+  else if(k==='ins'){
+    if(d.id){const i=ins(d.id);i.n=d.n;i.c=+d.c;i.u=d.u;i.precio=+d.p;ui.eIns=null}
+    else{S.ins.push({id:uid(),n:d.n,c:+d.c,u:d.u,precio:+d.p})}
+    save();render();
+  }
+  else if(k==='ven'){S.ven.push({id:uid(),f:d.f,p:d.p,c:+d.c,pr:+d.pr,cu:calc(S.pos.find(x=>x.id===d.p)).porc});save();render()}
+  else if(k==='inv'){S.inv.push({id:uid(),f:d.f,n:d.n,m:+d.m,vu:+d.vu||36});save();render()}
+  else if(k==='pun'){S.pun.push({id:uid(),n:d.n,k:+d.k});save();render()}
+  else if(k==='sal'){S.sal.push({id:uid(),f:d.f,pu:d.pu,p:d.p,c:+d.c,pvp:+d.pvp,v:0,m:0,d:0});save();render()}
+  else if(k==='liq'){const s=S.sal.find(x=>x.id===d.id);s.v+=+d.v;s.m+=+d.mm;s.d+=+d.d;dlg.close();save();render()}
+  else if(k==='ped'){
+    const p=S.pos.find(x=>x.id===d.p),q=cotz(p,+d.por||0,+d.h||0,+d.ex||0,!!d.u);
+    S.ped.push({id:uid(),cl:d.cl,fe:d.fe,p:d.p,por:+d.por,h:+d.h,ex:+d.ex,u:!!d.u,pf:+d.pf||q.P,est:'COTIZADO',pag:[]});
+    save();render();
+  }
+  else if(k==='pago'){const p=S.ped.find(x=>x.id===d.id);p.pag.push({f:today(),m:+d.m});dlg.close();save();render()}
+});
+
+// Persistencia de sesión activa en la app
+function guardarSesionActiva(){
+  localStorage.setItem('usuarioLogueado','true');
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  guardarSesionActiva();
+  render();
+});
 </script>
 </body>
 </html>
