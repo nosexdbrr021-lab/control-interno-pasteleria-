@@ -1,13 +1,10 @@
 {
-  "background_color": "#ffffff",
-  "dir": "ltr",
-  "display": "standalone",
-  "name": "control interno pasteleria",
-  "orientation": "any",
-  "scope": "/",
-  "short_name": "control interno",
+  "name": "Control Interno Pastelería",
+  "short_name": "Pastelería",
   "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
   "theme_color": "#ffffff",
-  "id": "https://control-interno-pasteleria-dpr2.vercel.app/",
-  "description": "Appde control interno para pasteleria"
+  "orientation": "any",
+  "description": "Aplicación de control interno para pastelería"
 }
