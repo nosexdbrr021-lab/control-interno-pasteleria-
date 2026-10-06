@@ -5,290 +5,400 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Belu Pastelería</title>
 
-<!-- Agregado para PWA / Pantalla Completa -->
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#1A1114">
+<meta name="theme-color" content="#0B0914">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-<!-- Agregado para exportar a PDF -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap">
 
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=DM+Sans:wght@400;500;700&display=swap">
 <style>
-:root{--bg:#F9F5F0;--card:#fff;--ch:#2A1A1E;--chx:#F3EAE2;--ro:#8E3A52;--rs:#F5E6E9;--ln:#E6DACF;--tx:#2A1A1E;--mu:#7C6B66;--ok:#2F7D5B;--no:#B3382C;--au:#B8935A;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#1A1114;--card:#261A1E;--ch:#EBDCD2;--chx:#33252A;--ro:#D98BA3;--rs:#432733;--ln:#3F2F33;--tx:#F5ECE7;--mu:#B8A5A0;--ok:#6FCF9F;--no:#F08A7E;--au:#D4B27A}}
-:root[data-theme=dark]{--bg:#1A1114;--card:#261A1E;--ch:#EBDCD2;--chx:#33252A;--ro:#D98BA3;--rs:#432733;--ln:#3F2F33;--tx:#F5ECE7;--mu:#B8A5A0;--ok:#6FCF9F;--no:#F08A7E;--au:#D4B27A}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 "DM Sans",system-ui,sans-serif}
-h1,h2,h3{font-family:"Cormorant Garamond",Georgia,serif;margin:0;color:var(--ch)}
-.app{display:grid;grid-template-columns:230px 1fr;min-height:100vh}
-aside{background:var(--ch);padding:26px 16px;position:sticky;top:0;height:100vh}
-aside h1{color:var(--bg);font-size:46px;font-style:italic;line-height:1;padding:0 10px}aside p.br{color:var(--au);opacity:1;letter-spacing:.34em;font-size:12px;margin:4px 10px 8px}
-aside p{color:var(--bg);opacity:.65;margin:0 10px 22px;font-size:13px}
-#nav{display:flex;flex-direction:column;gap:2px}
-#nav button{background:none;border:0;color:var(--bg);opacity:.75;text-align:left;padding:10px 12px;border-radius:8px;font:inherit;cursor:pointer}
-#nav button:hover{opacity:1;background:#ffffff14}
-#nav button.on{background:var(--ro);color:#fff;opacity:1;font-weight:700}
-main{padding:30px clamp(16px,4vw,44px);max-width:1100px;width:100%}
-main>h2{font-size:38px;margin-bottom:4px}main>h2:after{content:"";display:block;width:44px;height:2px;background:var(--au);margin-top:6px}
-.sub{color:var(--mu);margin:0 0 22px}
-.card{background:var(--card);border:1px solid var(--ln);border-radius:12px;padding:18px;margin-bottom:18px}
-.card h3{font-size:18px;margin-bottom:12px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:18px}
-.k{background:var(--card);border:1px solid var(--ln);border-radius:12px;padding:14px 16px}
-.k span{color:var(--mu);font-size:13px}.k b{display:block;font-size:28px;font-family:"Cormorant Garamond",Georgia,serif;color:var(--ch);margin-top:2px}
-.pos{color:var(--ok)!important}.neg{color:var(--no)!important}
-.hero{background:var(--ch);color:var(--bg);border-radius:14px;padding:26px;margin-bottom:18px}
-.hero span{opacity:.75}.hero b{display:block;font:700 58px "Cormorant Garamond",Georgia,serif;margin:2px 0 6px}
-.hero small{opacity:.7}
-.tw{overflow-x:auto}
-table{width:100%;border-collapse:collapse;font-size:14px}
-th,td{padding:9px 10px;text-align:right;border-bottom:1px solid var(--ln);white-space:nowrap}
-th:first-child,td:first-child{text-align:left}
-th{color:var(--mu);font-weight:500;font-size:13px}
-tfoot td{font-weight:700;border-bottom:0;background:var(--chx)}
-form.row{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end}
-label{display:flex;flex-direction:column;font-size:13px;color:var(--mu);gap:3px;flex:1;min-width:120px}
-input,select,textarea{font:inherit;color:var(--tx);background:var(--bg);border:1px solid var(--ln);border-radius:8px;padding:8px 10px;width:100%}
-input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid var(--ro);outline-offset:1px}
-button.p,button.s,button.dg{font:inherit;font-weight:500;border-radius:8px;padding:9px 16px;cursor:pointer;border:1px solid var(--ro)}
-button.p{background:var(--ro);color:#fff}
-button.s{background:none;color:var(--ro)}
-button.dg{background:none;color:var(--no);border-color:var(--no)}
-button.l{background:none;border:0;color:var(--ro);cursor:pointer;font:inherit;padding:2px 6px}
-button.x{background:none;border:0;color:var(--mu);cursor:pointer;font-size:16px;padding:4px 8px}
-.pl{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
-.pc{background:var(--card);border:1px solid var(--ln);border-radius:12px;padding:16px;text-align:left;cursor:pointer;font:inherit;color:var(--tx)}
-.pc:hover{border-color:var(--ro)}
-.pc h3{font-size:19px;margin-bottom:6px}.pc small{color:var(--mu);display:block}
-.pc em{font-style:normal;color:var(--ro);font-weight:700;font-size:18px}
-.mu{color:var(--mu)}
-dialog{border:1px solid var(--ln);border-radius:14px;background:var(--card);color:var(--tx);width:min(640px,94vw);max-height:90vh;padding:22px}
-dialog::backdrop{background:#0008}
-.dh{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-dialog h3{margin:16px 0 6px;font-size:16px}
-dialog ol{padding-left:20px;margin:0}dialog li{margin-bottom:5px}
-.sum{background:var(--rs);border-radius:10px;padding:12px 14px;margin-top:14px;display:grid;grid-template-columns:1fr auto;gap:3px 16px}
-.sum b:nth-child(even){text-align:right}
-.act{display:flex;gap:10px;margin-top:16px;justify-content:flex-end}
-.ir{display:flex;gap:8px;margin-bottom:8px;align-items:center}.ir select{flex:2}.ir input{flex:1}
-.bars-w{display:flex;gap:16px;align-items:flex-end;height:170px;padding-top:6px}
-.bc{flex:1;display:flex;flex-direction:column;align-items:center;height:100%;justify-content:flex-end;gap:6px}
-.bars{display:flex;gap:4px;align-items:flex-end;height:100%;width:100%;justify-content:center}
-.bars i{width:min(26px,40%);border-radius:4px 4px 0 0;min-height:2px}
-.b1{background:var(--ro)}.b2{background:var(--ch)}
-.bc span{font-size:12px;color:var(--mu)}
-.lg{font-size:13px;color:var(--mu);display:flex;gap:14px;margin-top:10px}.lg i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px}
-.empty{color:var(--mu);padding:14px 0}
-@media(max-width:760px){.app{grid-template-columns:1fr}aside{position:static;height:auto;padding:14px 10px}aside p:not(.br){display:none}#nav{flex-direction:row;overflow-x:auto}#nav button{white-space:nowrap}.hero b{font-size:34px}}
-.card,.k,.pc{box-shadow:0 1px 2px #2a1a1e0d,0 8px 20px #2a1a1e0a}
-.hero{border-top:3px solid var(--au)}
-.ph{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:10px;background:var(--chx);font-size:19px;overflow:hidden;flex:none}
-.ph img{width:100%;height:100%;object-fit:cover}.ph.lg{width:60px;height:60px;font-size:28px;border-radius:12px}
-.nm{display:inline-flex;align-items:center;gap:10px;text-align:left}
-.er td{padding:9px 10px}.er .t td{font-weight:700;background:var(--chx)}
-input[type=file]{padding:6px}
+:root {
+  --bg: #0B0914;
+  --card: #151226;
+  --card-border: #231E3D;
+  --purple-grad: linear-gradient(135deg, #5B21B6 0%, #7C3AED 100%);
+  --tx: #F3F4F6;
+  --mu: #9CA3AF;
+  --ok: #10B981;
+  --no: #EF4444;
+  --accent: #A855F7;
+  --chx: #1C1733;
+  --rs: #2A1A2E;
+  box-sizing: border-box;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--tx);
+  font: 14px/1.4 "DM Sans", -apple-system, sans-serif;
+}
+
+.app-viewport {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+.app-header {
+  padding: 12px 16px 8px;
+  flex: none;
+  background: var(--bg);
+  border-bottom: 1px solid var(--card-border);
+}
+
+.app-header h1 {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0;
+  color: #fff;
+}
+
+.sub {
+  color: var(--mu);
+  font-size: 12px;
+  margin: 2px 0 0;
+}
+
+main {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 14px 12px 20px;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 14px;
+}
+
+.card h3 {
+  font-size: 16px;
+  margin: 0 0 10px;
+  color: #fff;
+}
+
+.hero {
+  background: var(--purple-grad);
+  border-radius: 16px;
+  padding: 18px;
+  margin-bottom: 14px;
+  color: #fff;
+  box-shadow: 0 8px 20px -4px rgba(124, 58, 237, 0.4);
+}
+
+.hero span { opacity: 0.85; font-size: 13px; }
+.hero b { display: block; font-size: 34px; margin: 2px 0 6px; }
+.hero small { opacity: 0.75; font-size: 11px; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.k {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.k span { color: var(--mu); font-size: 11px; display: block; }
+.k b { display: block; font-size: 18px; color: #fff; margin-top: 2px; }
+
+.pos { color: var(--ok) !important; }
+.neg { color: var(--no) !important; }
+
+.tw { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th, td { padding: 8px 6px; text-align: right; border-bottom: 1px solid var(--card-border); white-space: nowrap; }
+th:first-child, td:first-child { text-align: left; }
+th { color: var(--mu); font-weight: 500; font-size: 12px; }
+tfoot td { font-weight: 700; background: var(--chx); }
+
+form.row { display: flex; flex-wrap: wrap; gap: 8px; align-items: flex-end; }
+label { display: flex; flex-direction: column; font-size: 12px; color: var(--mu); gap: 2px; flex: 1; min-width: 110px; }
+input, select, textarea {
+  font: inherit;
+  color: #fff;
+  background: #0B0914;
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  width: 100%;
+}
+
+button.p, button.s, button.dg {
+  font: inherit;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 9px 14px;
+  cursor: pointer;
+  border: 0;
+}
+button.p { background: var(--accent); color: #fff; }
+button.s { background: var(--card-border); color: var(--tx); }
+button.dg { background: rgba(239, 68, 68, 0.2); color: var(--no); }
+button.l { background: none; border: 0; color: var(--accent); cursor: pointer; padding: 2px 4px; font-size: 12px; }
+button.x { background: none; border: 0; color: var(--mu); cursor: pointer; font-size: 16px; }
+
+.pl { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+.pc {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 12px;
+  text-align: left;
+  cursor: pointer;
+  color: var(--tx);
+}
+.pc h3 { font-size: 15px; margin: 4px 0 2px; }
+.pc small { color: var(--mu); display: block; font-size: 11px; }
+.pc em { font-style: normal; color: var(--accent); font-weight: 700; font-size: 15px; }
+
+dialog {
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  background: var(--card);
+  color: var(--tx);
+  width: min(90vw, 500px);
+  padding: 16px;
+}
+dialog::backdrop { background: rgba(0,0,0,0.7); }
+.dh { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+
+.bottom-nav {
+  flex: none;
+  height: 65px;
+  background: rgba(21, 18, 38, 0.96);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid var(--card-border);
+  display: flex;
+  overflow-x: auto;
+  align-items: center;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.nav-item {
+  background: none;
+  border: 0;
+  color: var(--mu);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  font-size: 10px;
+  padding: 4px 8px;
+  cursor: pointer;
+  flex: 1;
+  min-width: 60px;
+  white-space: nowrap;
+}
+
+.nav-item.active { color: #fff; font-weight: 700; }
+.nav-item.active .nav-icon { background: rgba(168, 85, 247, 0.25); color: var(--accent); }
+.nav-icon { width: 32px; height: 22px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 13px; }
+
+.ph { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 8px; background: var(--chx); }
+.nm { display: inline-flex; align-items: center; gap: 8px; }
+.empty { color: var(--mu); padding: 10px 0; text-align: center; }
 </style>
 </head>
 <body>
-<div class="app">
-<aside><h1>Belu</h1><p class="br">Pastelería</p><p>Costos, ventas y capital en un solo lugar</p><nav id="nav"></nav></aside>
-<main id="main"></main>
+
+<div class="app-viewport">
+  <div class="app-header">
+    <h1 id="hdr-title">Belu Pastelería</h1>
+    <p class="sub" id="hdr-sub">Cargando...</p>
+  </div>
+
+  <main id="main"></main>
+
+  <nav class="bottom-nav" id="nav"></nav>
 </div>
+
 <dialog id="dlg"></dialog>
+
 <script>
-const KEY='dulcecuenta_v1',U={g:[1,'g'],kg:[1000,'g'],ml:[1,'ml'],L:[1000,'ml'],un:[1,'un']};
-const $=s=>document.querySelector(s),dlg=$('#dlg');
+const KEY='dulcecuenta_v1', U={g:[1,'g'],kg:[1000,'g'],ml:[1,'ml'],L:[1000,'ml'],un:[1,'un']};
+const $=s=>document.querySelector(s), dlg=$('#dlg');
 const uid=()=>Math.random().toString(36).slice(2,9);
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const today=()=>new Date().toISOString().slice(0,10);
 const dd=o=>new Date(Date.now()-o*864e5).toISOString().slice(0,10);
 const fd8=f=>f.split('-').reverse().join('/');
 const mesN=k=>new Date(k+'-15').toLocaleDateString('es-PE',{month:'short',year:'2-digit'});
+
 let S;
-try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+try{ S=JSON.parse(localStorage.getItem(KEY)) }catch(e){}
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
 const m=n=>S.cfg.mon+' '+(+n).toFixed(2);
 const ins=id=>S.ins.find(i=>i.id===id);
 const cb=i=>i.precio/(i.c*U[i.u][0]);
 const cls=n=>n<0?'neg':'pos';
-const EM=[[/tres leches|torta|keke|cake/i,'🍰'],[/leche/i,'🥛'],[/huevo/i,'🥚'],[/az[uú]car/i,'🍬'],[/harina/i,'🌾'],[/mantequilla/i,'🧈'],[/vainilla/i,'🌼'],[/polvo/i,'🧂'],[/crema|flan/i,'🍮'],[/vitrina/i,'🗄️'],[/enfriador|refri|congel/i,'❄️'],[/batidora|licuadora|horno/i,'🥣']];
-const th=(o,c='')=>`<span class="ph ${c}">${o.img?`<img src="${o.img}" alt="">`:(EM.find(([x])=>x.test(o.n))||[0,'🧁'])[1]}</span>`;
+
+const EM=[[/tres leches|torta|keke|cake/i,'🍰'],[/leche/i,'🥛'],[/huevo/i,'🥚'],[/az[uú]car/i,'🍬'],[/harina/i,'🌾'],[/mantequilla/i,'🧈'],[/vainilla/i,'🌼'],[/polvo/i,'🧂'],[/crema|flan/i,'🍮']];
+const th=(o,c='')=>`<span class="ph ${c}">${(EM.find(([x])=>x.test(o.n))||[0,'🧁'])[1]}</span>`;
 const nm=(o,t,c)=>`<span class="nm">${th(o,c)}${t}</span>`;
 const pp=id=>S.pos.find(p=>p.id===id)||{n:'(eliminado)'};
 const gp=n=>n<0?'Pérdida':'Ganancia';
+
 const mdif=(a,b)=>(+a.slice(0,4)-+b.slice(0,4))*12+(+a.slice(5)-+b.slice(5));
 const dep=k=>S.inv.reduce((a,x)=>{const v=x.vu||36,q=x.m/v,n=mdif(k||today().slice(0,7),x.f.slice(0,7));return a+(k?(n>=0&&n<v?q:0):Math.min(v,Math.max(0,n+1))*q)},0);
-const R=(f,k)=>{const t=tot(f),g=S.gas.filter(f).reduce((a,x)=>a+x.m,0),mer=S.mer.filter(f).reduce((a,x)=>a+x.cos,0),com=S.ven.filter(f).reduce((a,v)=>a+v.c*(v.com||0),0),d=dep(k);return{...t,gas:g,mer,com,dep:d,iv:invS(f),net:t.gan-mer-g-d}};
-const edr=r=>`<table class="er"><tbody><tr><td>Ingresos por ventas (vitrina ya sin comisión)</td><td>${m(r.ing)}</td></tr><tr><td>(−) Gasto en insumos</td><td>${m(r.cos)}</td></tr><tr><td>(−) Mermas de vitrina</td><td>${m(r.mer)}</td></tr><tr class="t"><td>Utilidad bruta</td><td class="${cls(r.gan-r.mer)}">${m(r.gan-r.mer)}</td></tr><tr><td>(−) Gastos generales</td><td>${m(r.gas)}</td></tr><tr class="t"><td>Utilidad operativa</td><td class="${cls(r.gan-r.mer-r.gas)}">${m(r.gan-r.mer-r.gas)}</td></tr><tr><td>(−) Depreciación de equipos</td><td>${m(r.dep)}</td></tr><tr class="t"><td>Resultado neto: ${gp(r.net)}</td><td class="${cls(r.net)}">${m(Math.abs(r.net))}</td></tr><tr><td class="mu">Equipos pagados (solo caja, no resta a la ganancia)</td><td class="mu">${m(r.iv)}</td></tr></tbody></table>`;
+const R=(f,k)=>{const t=tot(f),g=S.gas.filter(f).reduce((a,x)=>a+x.m,0),mer=S.mer.filter(f).reduce((a,x)=>a+x.cos,0),d=dep(k);return{...t,gas:g,mer,dep:d,iv:invS(f),net:t.gan-mer-g-d}};
+
 function calc(p){
   const insumos=p.ings.reduce((a,r)=>{const i=ins(r.i);return a+(i?cb(i)*r.c:0)},0);
-  const total=insumos+ +p.otros+p.porc*p.emp,porc=total/p.porc;
-  const ideal=Math.ceil(porc*(1+p.mar/100)*10-1e-9)/10,precio=p.precio>0?p.precio:ideal;
+  const total=insumos+ +p.otros+p.porc*p.emp, porc=total/p.porc;
+  const ideal=Math.ceil(porc*(1+p.mar/100)*10-1e-9)/10, precio=p.precio>0?p.precio:ideal;
   return{insumos,total,porc,ideal,precio,gan:precio-porc};
 }
+
 function seed(){
   const I=(n,c,u,precio)=>({id:uid(),n,c,u,precio});
-  const li=[I('Leche evaporada',400,'g',4.5),I('Leche condensada',393,'g',6.5),I('Leche fresca',1,'L',4.8),I('Huevos',30,'un',15),I('Azúcar',1,'kg',4.2),I('Harina',1,'kg',4),I('Mantequilla',200,'g',8),I('Esencia de vainilla',120,'ml',6),I('Polvo de hornear',100,'g',5)];
+  const li=[I('Leche evaporada',400,'g',4.5),I('Leche condensada',393,'g',6.5),I('Leche fresca',1,'L',4.8),I('Huevos',30,'un',15),I('Azúcar',1,'kg',4.2),I('Harina',1,'kg',4),I('Mantequilla',200,'g',8)];
   const g=n=>li.find(i=>i.n===n).id;
   const P=(n,porc,l,pasos,precio)=>({id:uid(),n,porc,ings:l.map(([x,c])=>({i:g(x),c})),pasos,emp:.3,otros:2,mar:100,precio:0});
-  const po=[
-    P('Crema volteada',8,[['Huevos',6],['Leche evaporada',400],['Leche condensada',393],['Leche fresca',250],['Azúcar',150],['Esencia de vainilla',5]],'Haz el caramelo con el azúcar y viértelo en el molde.\nLicúa huevos, leches y vainilla.\nVierte la mezcla sobre el caramelo.\nCocina a baño maría 50 minutos.\nEnfría y refrigera 4 horas antes de voltear.',5.5),
-    P('Tres leches',10,[['Huevos',6],['Harina',200],['Azúcar',200],['Leche evaporada',400],['Leche condensada',393],['Leche fresca',250],['Polvo de hornear',8],['Esencia de vainilla',5]],'Bate huevos con azúcar hasta que dupliquen su volumen.\nIncorpora harina y polvo de hornear.\nHornea a 180 °C por 30 minutos.\nMezcla las tres leches y báñalo ya frío.\nRefrigera 3 horas y decora.',4.5),
-    P('Keke',10,[['Harina',300],['Azúcar',200],['Huevos',4],['Mantequilla',150],['Leche fresca',150],['Polvo de hornear',10],['Esencia de vainilla',5]],'Bate la mantequilla con el azúcar.\nAgrega los huevos uno a uno.\nIncorpora harina, polvo de hornear y leche.\nHornea a 180 °C por 40 minutos.',2.5)];
+  const po=[P('Crema volteada',8,[['Huevos',6],['Leche evaporada',400],['Leche condensada',393],['Azúcar',150]],'Mezclar y hornear.',5.5)];
   S={cfg:{mon:'S/',cap:3000,mar:100},ins:li,pos:po,ven:[],inv:[],gas:[]};
-  [[2,0,5],[2,1,4],[1,2,6],[5,0,3],[8,1,6],[12,2,8],[40,0,4]].forEach(([o,k,c])=>{const p=po[k],x=calc(p);S.ven.push({id:uid(),f:dd(o),p:p.id,c,pr:x.precio,cu:x.porc})});
-  [[30,'Vitrina exhibidora',850],[20,'Enfriador',1200],[10,'Batidora',320]].forEach(([o,n,mo])=>S.inv.push({id:uid(),f:dd(o),n,m:mo}));
-  [[25,'Alquiler del local',400],[12,'Luz y agua',90]].forEach(([o,n,mo])=>S.gas.push({id:uid(),f:dd(o),n,m:mo}));
   save();
 }
+
 if(!S)seed();
-S.gas=S.gas||[];S.cfg.mar=S.cfg.mar||100;S.pos.forEach(p=>p.precio=0);
-S.pun=S.pun||[];S.sal=S.sal||[];S.mer=S.mer||[];S.ped=S.ped||[];S.cfg.tar=S.cfg.tar??8;S.cfg.mp=S.cfg.mp??40;S.gas.forEach(x=>x.tipo=x.tipo||'FIJO');S.inv.forEach(x=>x.vu=x.vu||36);
+S.gas=S.gas||[]; S.cfg.mar=S.cfg.mar||100; S.pun=S.pun||[]; S.sal=S.sal||[]; S.mer=S.mer||[]; S.ped=S.ped||[]; S.inv=S.inv||[];
+
 let ui={tab:'panel',mes:today().slice(0,7),sim:{},eIns:null};
-const T=[['panel','Panel'],['insumos','Insumos'],['postres','Postres'],['costos','Costos'],['ventas','Ventas'],['vit','Vitrina'],['ped','Pedidos'],['comp','Compras'],['inv','Inversiones'],['gas','Gastos generales'],['res','Resumen mensual']];
+const T=[
+  ['panel','Panel','🏠'],
+  ['insumos','Insumos','🌾'],
+  ['postres','Postres','🧁'],
+  ['costos','Costos','💰'],
+  ['ventas','Ventas','💳'],
+  ['vit','Vitrina','🏪'],
+  ['ped','Pedidos','📋'],
+  ['comp','Compras','🛒'],
+  ['inv','Equipos','⚙️'],
+  ['gas','Gastos','💸']
+];
+
 const tot=f=>{let i=0,c=0;S.ven.filter(f).forEach(v=>{i+=v.c*v.pr;c+=v.c*v.cu});return{ing:i,cos:c,gan:i-c}};
 const invS=f=>S.inv.filter(f).reduce((a,x)=>a+x.m,0);
-const pn=id=>(S.pos.find(p=>p.id===id)||{n:'(eliminado)'}).n;
-const head=(t,s)=>`<h2>${t}</h2><p class="sub">${s}</p>`;
+
 const V={};
 V.panel=()=>{
-  const t=tot(()=>1),r=R(()=>1),iv=r.iv,cap=S.cfg.cap+r.net;
-  const ms=[...new Set([...S.ven.map(v=>v.f.slice(0,7)),...S.inv.map(x=>x.f.slice(0,7))])].sort().slice(-6);
-  const rows=ms.map(k=>({k,i:tot(v=>v.f.startsWith(k)).ing,g:(q=>q.cos+q.mer+q.gas+q.dep)(R(v=>v.f.startsWith(k),k))}));
-  const mx=Math.max(1,...rows.flatMap(r=>[r.i,r.g]));
-  return head('Panel','Así va tu negocio hoy.')+`
-  <div class="hero"><span>Capital actual</span><b>${m(cap)}</b><small>Capital inicial ${m(S.cfg.cap)} ${r.net<0?'−':'+'} ${gp(r.net).toLowerCase()} neta ${m(Math.abs(r.net))} · Caja estimada ${m(S.cfg.cap+r.net+r.dep-r.iv)}</small></div>
+  const t=tot(()=>1), r=R(()=>1), cap=S.cfg.cap+r.net;
+  return `
+  <div class="hero"><span>Capital Actual</span><b>${m(cap)}</b><small>Caja estimada ${m(S.cfg.cap+r.net+r.dep-r.iv)}</small></div>
   <div class="grid">
-   <div class="k"><span>Ingresos (dinero de tus ventas)</span><b>${m(t.ing)}</b></div>
-   <div class="k"><span>Gastado en insumos</span><b>${m(t.cos)}</b></div>
-   <div class="k"><span>Gastos generales</span><b>${m(r.gas)}</b></div>
-   <div class="k"><span>Invertido en equipos</span><b>${m(iv)}</b></div><div class="k"><span>${gp(r.net)} neta</span><b class="${cls(r.net)}">${m(Math.abs(r.net))}</b></div></div>
-  <div class="card tw"><h3>Estado de resultados</h3>${edr(r)}</div>
-  <div class="card"><h3>Ingresos y gastos por mes</h3>${rows.length?`<div class="bars-w">${rows.map(r=>`<div class="bc"><div class="bars"><i class="b1" style="height:${r.i/mx*100}%" title="Ingresos ${m(r.i)}"></i><i class="b2" style="height:${r.g/mx*100}%" title="Gastos ${m(r.g)}"></i></div><span>${mesN(r.k)}</span></div>`).join('')}</div><div class="lg"><span><i class="b1"></i>Ingresos</span><span><i class="b2"></i>Gastos (insumos, generales y depreciación)</span></div>`:'<p class="empty">Registra tu primera venta para ver el gráfico.</p>'}</div>
-  <div class="card"><h3>Configuración</h3><p class="mu" style="margin:0 0 14px">Solo estos 3 datos los pones tú. Todo lo demás (costos, precios, ganancias y capital) lo calcula la app. <b>Dinero con que empezaste</b>: lo que tenías al abrir el negocio (puede ser 0). <b>Cuánto quieres ganar</b>: con 100% cobras el doble de lo que te cuesta cada porción; con 50%, el costo más la mitad. <b>Moneda</b>: el símbolo, por ejemplo S/.</p><form class="row" data-f="cfg"><label>¿Con cuánto dinero empezaste?<input name="cap" type="number" step="any" value="${S.cfg.cap}" required></label><label>¿Cuánto quieres ganar? (% sobre el costo)<input name="mar" type="number" min="0" value="${S.cfg.mar}"></label><label>Pago por hora de decoración<input name="tar" type="number" step="any" min="0" value="${S.cfg.tar}"></label><label>Margen en pedidos especiales (%)<input name="mp" type="number" min="0" value="${S.cfg.mp}"></label><label>Moneda<input name="mon" value="${esc(S.cfg.mon)}" maxlength="4"></label><button class="p">Guardar</button></form></div>`;
+   <div class="k"><span>Ventas Total</span><b>${m(t.ing)}</b></div>
+   <div class="k"><span>Gasto Insumos</span><b>${m(t.cos)}</b></div>
+   <div class="k"><span>Gastos Generales</span><b>${m(r.gas)}</b></div>
+   <div class="k"><span>${gp(r.net)} Neta</span><b class="${cls(r.net)}">${m(Math.abs(r.net))}</b></div>
+  </div>`;
 };
+
 V.insumos=()=>{
   const e=S.ins.find(i=>i.id===ui.eIns)||{id:'',n:'',c:'',u:'g',precio:''};
-  return head('Insumos','Anota lo que pagas por cada ingrediente. La app calcula el costo por gramo, mililitro o unidad.')+`
-  <div class="card"><h3>${e.id?'Editar insumo':'Nuevo insumo'}</h3><form class="row" data-f="ins"><input type="hidden" name="id" value="${e.id}">
+  return `
+  <div class="card"><h3>${e.id?'Editar Insumo':'Nuevo Insumo'}</h3>
+  <form class="row" data-f="ins"><input type="hidden" name="id" value="${e.id}">
    <label style="flex:2">Nombre<input name="n" value="${esc(e.n)}" required></label>
-   <label>Cantidad comprada<input name="c" type="number" step="any" min="0.0001" value="${e.c}" required></label>
+   <label>Cantidad<input name="c" type="number" step="any" value="${e.c}" required></label>
    <label>Unidad<select name="u">${Object.keys(U).map(u=>`<option ${u===e.u?'selected':''}>${u}</option>`).join('')}</select></label>
-   <label>Precio pagado<input name="p" type="number" step="any" min="0" value="${e.precio}" required></label><label>Foto (opcional)<input name="foto" type="file" accept="image/*"></label>
-   <button class="p">${e.id?'Guardar cambios':'Agregar'}</button>${e.id?'<button type="button" class="s" data-a="cancelIns">Cancelar</button>':''}</form></div>
-  <div class="card tw">${S.ins.length?`<table><thead><tr><th>Insumo</th><th>Compra</th><th>Precio</th><th>Costo por unidad</th><th></th></tr></thead><tbody>${S.ins.map(i=>`<tr><td>${nm(i,esc(i.n))}</td><td>${i.c} ${i.u}</td><td>${m(i.precio)}</td><td>${S.cfg.mon} ${cb(i).toFixed(4)} / ${U[i.u][1]}</td><td><button class="l" data-a="editIns" data-id="${i.id}">Editar</button><button class="l" data-a="delIns" data-id="${i.id}">Eliminar</button></td></tr>`).join('')}</tbody></table>`:'<p class="empty">Aún no tienes insumos. Agrega el primero arriba.</p>'}</div>`;
+   <label>Precio<input name="p" type="number" step="any" value="${e.precio}" required></label>
+   <button class="p">${e.id?'Guardar':'Agregar'}</button>
+  </form></div>
+  <div class="card tw"><table><thead><tr><th>Insumo</th><th>Precio</th><th>Costo/Unidad</th><th></th></tr></thead><tbody>
+  ${S.ins.map(i=>`<tr><td>${nm(i,esc(i.n))}</td><td>${m(i.precio)}</td><td>${S.cfg.mon}${cb(i).toFixed(3)}</td><td><button class="l" data-a="editIns" data-id="${i.id}">Edit</button><button class="l" data-a="delIns" data-id="${i.id}">X</button></td></tr>`).join('')}
+  </tbody></table></div>`;
 };
-V.postres=()=>head('Mis postres','Haz clic en un postre para ver ingredientes y preparación.')+`
-  <p><button class="p" data-a="newPos">Nuevo postre</button></p>
-  ${S.pos.length?`<div class="pl">${S.pos.map(p=>{const c=calc(p);return`<button class="pc" data-a="ver" data-id="${p.id}"><span class="nm" style="margin-bottom:8px">${th(p,'lg')}<h3 style="margin:0">${esc(p.n)}</h3></span><small>${p.porc} porciones · ${p.ings.length} ingredientes</small><small>Costo por porción ${m(c.porc)}</small><em>${m(c.precio)}</em></button>`}).join('')}</div>`:'<p class="empty">Aún no tienes postres. Crea el primero.</p>'}`;
+
+V.postres=()=>`
+  <div class="pl">${S.pos.map(p=>{const c=calc(p);return`<button class="pc"><span class="nm">${th(p)}<h3>${esc(p.n)}</h3></span><small>${p.porc} porciones</small><em>${m(c.precio)}</em></button>`}).join('')}</div>`;
+
 V.costos=()=>{
   const r=S.pos.map(p=>({p,c:calc(p)}));
-  return head('Costos y precio ideal','Cuánto gastas por postre y a cuánto conviene venderlo.')+`
-  <div class="card tw"><h3>Costo por postre</h3>${r.length?`<table><thead><tr><th>Postre</th><th>Insumos</th><th>Otros costos</th><th>Costo total</th><th>Porciones</th><th>Costo por porción</th><th>Precio de venta (calculado)</th><th>Ganancia por porción</th></tr></thead><tbody>${r.map(({p,c})=>`<tr><td>${nm(p,esc(p.n))}</td><td>${m(c.insumos)}</td><td>${m(c.total-c.insumos)}</td><td>${m(c.total)}</td><td>${p.porc}</td><td>${m(c.porc)}</td><td><b>${m(c.precio)}</b></td><td class="${cls(c.gan)}">${m(c.gan)}</td></tr>`).join('')}</tbody></table>`:'<p class="empty">Crea postres para ver sus costos.</p>'}<p class="mu" style="margin-bottom:0">Otros costos = empaque por porción + gas, mano de obra u otros por receta. La app calcula el precio de venta: costo por porción más tu margen, redondeado a 10 céntimos.</p></div>
-  <div class="card tw"><h3>Simulador: ¿cuánto ganaría si vendo todo?</h3>${r.length?`<table><thead><tr><th>Postre</th><th>Unidades</th><th>Precio</th><th>Ingreso</th><th>Costo</th><th>Ganancia</th></tr></thead><tbody>${r.map(({p,c})=>`<tr><td>${nm(p,esc(p.n))}</td><td><input type="number" min="0" data-sim="${p.id}" value="${ui.sim[p.id]??5}" style="width:80px"></td><td>${m(c.precio)}</td><td id="si${p.id}"></td><td id="sc${p.id}"></td><td id="sg${p.id}"></td></tr>`).join('')}</tbody><tfoot><tr><td colspan="3">Total</td><td id="sTi"></td><td id="sTc"></td><td id="sTg"></td></tr></tfoot></table>`:''}</div>`;
+  return `<div class="card tw"><table><thead><tr><th>Postre</th><th>Costo/Porción</th><th>Precio Venta</th><th>Ganancia</th></tr></thead><tbody>
+  ${r.map(({p,c})=>`<tr><td>${nm(p,esc(p.n))}</td><td>${m(c.porc)}</td><td><b>${m(c.precio)}</b></td><td class="${cls(c.gan)}">${m(c.gan)}</td></tr>`).join('')}
+  </tbody></table></div>`;
 };
-function simUpd(){
-  let I=0,C=0;
-  S.pos.forEach(p=>{const q=+(ui.sim[p.id]??5)||0,c=calc(p),i=q*c.precio,k=q*c.porc;I+=i;C+=k;
-    if($('#si'+p.id)){$('#si'+p.id).textContent=m(i);$('#sc'+p.id).textContent=m(k);$('#sg'+p.id).textContent=m(i-k)}});
-  if($('#sTi')){$('#sTi').textContent=m(I);$('#sTc').textContent=m(C);$('#sTg').textContent=m(I-C)}
-}
+
 V.ventas=()=>{
-  const p0=S.pos[0],v=[...S.ven].sort((a,b)=>b.f.localeCompare(a.f)).slice(0,60);
-  return head('Ventas','Registra lo que vendes. La ganancia se calcula con el costo del postre al momento de la venta.')+`
-  <div class="card"><h3>Nueva venta</h3>${p0?`<form class="row" data-f="ven"><label>Fecha<input name="f" type="date" value="${today()}" required></label>
-   <label style="flex:2">Postre<select name="p" id="vp">${S.pos.map(p=>`<option value="${p.id}">${esc(p.n)}</option>`).join('')}</select></label>
-   <label>Cantidad<input name="c" type="number" min="1" value="1" required></label>
-   <label>Precio (calculado)<input name="pr" id="vpr" type="number" step="any" min="0" value="${calc(p0).precio.toFixed(2)}" required></label><button class="p">Registrar venta</button></form>`:'<p class="empty">Primero crea un postre.</p>'}</div>
-  <div class="card tw">${v.length?`<table><thead><tr><th>Fecha</th><th>Postre</th><th>Cant.</th><th>Precio</th><th>Ingreso</th><th>Costo insumos</th><th>Ganancia</th><th></th></tr></thead><tbody>${v.map(x=>{const i=x.c*x.pr,k=x.c*x.cu;return`<tr><td>${fd8(x.f)}</td><td>${nm(pp(x.p),esc(pp(x.p).n))}</td><td>${x.c}</td><td>${m(x.pr)}</td><td>${m(i)}</td><td>${m(k)}</td><td class="${cls(i-k)}">${m(i-k)}</td><td><button class="l" data-a="delVen" data-id="${x.id}">Eliminar</button></td></tr>`}).join('')}</tbody></table>`:'<p class="empty">Sin ventas registradas todavía.</p>'}</div>`;
+  const p0=S.pos[0], v=[...S.ven].reverse();
+  return `<div class="card"><h3>Nueva Venta</h3>${p0?`<form class="row" data-f="ven">
+   <label style="flex:2">Postre<select name="p">${S.pos.map(p=>`<option value="${p.id}">${esc(p.n)}</option>`).join('')}</select></label>
+   <label>Cantidad<input name="c" type="number" value="1" required></label>
+   <label>Precio<input name="pr" type="number" step="any" value="${calc(p0).precio.toFixed(2)}" required></label>
+   <button class="p">Registrar</button></form>`:'<p class="empty">Agrega postres primero.</p>'}</div>
+  <div class="card tw"><table><thead><tr><th>Postre</th><th>Cant.</th><th>Total</th><th></th></tr></thead><tbody>
+  ${v.map(x=>`<tr><td>${nm(pp(x.p),esc(pp(x.p).n))}</td><td>${x.c}</td><td>${m(x.c*x.pr)}</td><td><button class="l" data-a="delVen" data-id="${x.id}">X</button></td></tr>`).join('')}
+  </tbody></table></div>`;
 };
-V.inv=()=>{
-  const v=[...S.inv].sort((a,b)=>b.f.localeCompare(a.f));
-  return head('Inversiones','Equipos y activos que compraste: vitrinas, enfriador, batidora y más. Se reparten mes a mes (depreciación) para no distorsionar tu ganancia.')+`
-  <div class="card"><h3>Nueva compra</h3><form class="row" data-f="inv"><label>Fecha<input name="f" type="date" value="${today()}" required></label><label style="flex:2">¿Qué compraste?<input name="n" required></label><label>Monto<input name="m" type="number" step="any" min="0" required></label><label>Foto (opcional)<input name="foto" type="file" accept="image/*"></label><label>Vida útil (meses)<input name="vu" type="number" min="1" value="36"></label><button class="p">Agregar</button></form></div>
-  <div class="card tw">${v.length?`<table><thead><tr><th>Fecha</th><th>Descripción</th><th>Monto</th><th></th></tr></thead><tbody>${v.map(x=>`<tr><td>${fd8(x.f)}</td><td>${nm(x,esc(x.n))}</td><td>${m(x.m)}</td><td><button class="l" data-a="delInv" data-id="${x.id}">Eliminar</button></td></tr>`).join('')}</tbody><tfoot><tr><td colspan="2">Total invertido</td><td colspan="2">${m(invS(()=>1))}</td></tr></tfoot></table>`:'<p class="empty">Aún no registraste inversiones.</p>'}</div>`;
-};
-const pu=id=>S.pun.find(x=>x.id===id)||{n:'(eliminado)',k:0};
-const pvpV=(p,k)=>Math.ceil(calc(p).porc/.92*(1+p.mar/100)/(1-k/100)*10-1e-9)/10;
-const cotz=(p,por,h,ex,u)=>{const f=por/p.porc,C=f*calc(p).total*1.05+h*S.cfg.tar+ex;let P=C*(1+S.cfg.mp/100);if(u)P*=1.15;return{C,P:Math.ceil(P/5-1e-9)*5}};
-const sel=(a,n,i)=>`<select name="${n}" id="${i||''}">${a.map(x=>`<option value="${x.id}">${esc(x.n)}</option>`).join('')}</select>`;
-V.vit=()=>{const p0=S.pos[0],u0=S.pun[0],v=[...S.sal].sort((a,b)=>b.f.localeCompare(a.f));
-return head('Vitrina (minimarket)','Lo que envías, lo que se vende y lo que se pierde. La comisión se descuenta antes de que el dinero entre a tus ventas.')+`
-<div class="card"><h3>Puntos de venta</h3><form class="row" data-f="pun"><label style="flex:2">Nombre del minimarket<input name="n" required></label><label>Comisión que se queda (%)<input name="k" type="number" min="0" max="90" step="any" value="25" required></label><button class="p">Agregar</button></form>${S.pun.length?`<p class="mu" style="margin:10px 0 0">${S.pun.map(x=>`${esc(x.n)} (${x.k}%) <button class="l" data-a="delPun" data-id="${x.id}">quitar</button>`).join(' · ')}</p>`:''}</div>
-<div class="card"><h3>Nueva salida a vitrina</h3>${p0&&u0?`<form class="row" data-f="sal"><label>Fecha<input name="f" type="date" value="${today()}" required></label><label>Punto${sel(S.pun,'pu','spu')}</label><label style="flex:2">Postre${sel(S.pos,'p','sp')}</label><label>Cantidad<input name="c" type="number" min="1" value="10" required></label><label>Precio al público<input name="pvp" id="spvp" type="number" step="any" min="0" value="${pvpV(p0,u0.k).toFixed(2)}" required></label><button class="p">Enviar</button></form><p class="mu" style="margin:10px 0 0">El precio sugerido ya cubre tu margen, la comisión y una merma esperada de 8%.</p>`:'<p class="empty">Primero agrega un minimarket y un postre.</p>'}</div>
-<div class="card tw">${v.length?`<table><thead><tr><th>Fecha</th><th>Punto</th><th>Postre</th><th>Enviadas</th><th>Vendidas</th><th>Merma</th><th>Devueltas</th><th>En vitrina</th><th>Te pagan c/u</th><th></th></tr></thead><tbody>${v.map(x=>{const e=x.c-x.v-x.m-x.d;return`<tr><td>${fd8(x.f)}</td><td>${esc(pu(x.pu).n)}</td><td>${nm(pp(x.p),esc(pp(x.p).n))}</td><td>${x.c}</td><td>${x.v}</td><td>${x.m}</td><td>${x.d}</td><td><b>${e}</b></td><td>${m(x.pvp*(1-pu(x.pu).k/100))}</td><td>${e>0?`<button class="l" data-a="liq" data-id="${x.id}">Liquidar</button>`:''}<button class="l" data-a="delSal" data-id="${x.id}">Eliminar</button></td></tr>`}).join('')}</tbody></table>`:'<p class="empty">Sin envíos todavía.</p>'}</div>`};
-function liq(id){const s=S.sal.find(x=>x.id===id),e=s.c-s.v-s.m-s.d;
-dlg.innerHTML=`<div class="dh"><h2>Liquidar vitrina</h2><button class="x" data-a="close" aria-label="Cerrar">✕</button></div><p class="mu">${esc(pp(s.p).n)} · ${esc(pu(s.pu).n)} · quedan ${e} en vitrina · te pagan ${m(s.pvp*(1-pu(s.pu).k/100))} por unidad</p><form data-f="liq" class="row"><input type="hidden" name="id" value="${id}"><label>Vendidas<input name="v" type="number" min="0" max="${e}" value="0"></label><label>Merma (vencidas o dañadas)<input name="mm" type="number" min="0" max="${e}" value="0"></label><label>Devueltas<input name="d" type="number" min="0" max="${e}" value="0"></label><button class="p">Guardar</button></form>`;dlg.showModal()}
-const pagado=x=>x.pag.reduce((a,b)=>a+b.m,0);
-V.ped=()=>{const p0=S.pos[0],v=[...S.ped].sort((a,b)=>(a.est==='ENTREGADO')-(b.est==='ENTREGADO')||a.fe.localeCompare(b.fe)),ab=v.filter(x=>x.est!=='ENTREGADO');
-return head('Pedidos especiales','Tortas y encargos con fecha de entrega. El cotizador calcula el precio sugerido.')+`
-<div class="grid"><div class="k"><span>Anticipos de clientes (aún no es ingreso)</span><b>${m(ab.reduce((a,x)=>a+pagado(x),0))}</b></div><div class="k"><span>Por cobrar</span><b>${m(ab.reduce((a,x)=>a+x.pf-pagado(x),0))}</b></div><div class="k"><span>Pedidos pendientes</span><b>${ab.length}</b></div></div>
-<div class="card"><h3>Nuevo pedido</h3>${p0?`<form class="row" data-f="ped"><label style="flex:2">Cliente<input name="cl" required></label><label>Entrega<input name="fe" type="datetime-local" value="${today()}T12:00" required></label><label style="flex:2">Postre base${sel(S.pos,'p')}</label><label>Porciones<input name="por" type="number" min="1" value="12" required></label><label>Horas de decoración<input name="h" type="number" step="any" min="0" value="1"></label><label>Empaque y toppers (monto)<input name="ex" type="number" step="any" min="0" value="0"></label><label style="flex:none;flex-direction:row;align-items:center"><input type="checkbox" name="u" style="width:auto"> Urgente</label><label>Precio final (vacío = sugerido)<input name="pf" type="number" step="any" min="0"></label><button class="p">Guardar pedido</button></form><p id="cot" style="margin:12px 0 0"></p>`:'<p class="empty">Primero crea un postre.</p>'}</div>
-<div class="card tw">${v.length?`<table><thead><tr><th>Entrega</th><th>Cliente</th><th>Pedido</th><th>Precio</th><th>Pagado</th><th>Saldo</th><th>Pago</th><th>Estado</th><th></th></tr></thead><tbody>${v.map(x=>{const g=pagado(x),pg=g<=0?'Pendiente':g<x.pf?'Adelanto':'Pagado',cr=x.est!=='ENTREGADO'&&x.pf-g>0&&new Date(x.fe)-Date.now()<1728e5;return`<tr><td>${x.fe.replace('T',' ')}${cr?' ⚠':''}</td><td>${esc(x.cl)}</td><td>${esc(pp(x.p).n)} × ${x.por}</td><td>${m(x.pf)}</td><td>${m(g)}</td><td>${m(x.pf-g)}</td><td>${pg}</td><td>${x.est==='ENTREGADO'?'Entregado':x.est==='CONFIRMADO'?'Confirmado':'Cotizado'}</td><td>${x.est==='COTIZADO'?`<button class="l" data-a="conf" data-id="${x.id}">Confirmar</button>`:''}${x.est!=='ENTREGADO'?`<button class="l" data-a="pagoD" data-id="${x.id}">Cobrar</button><button class="l" data-a="ent" data-id="${x.id}">Entregar</button>`:''}<button class="l" data-a="delPed" data-id="${x.id}">Eliminar</button></td></tr>`}).join('')}</tbody></table>`:'<p class="empty">Sin pedidos todavía.</p>'}</div>`};
-function cotUpd(){const f=$('[data-f=ped]');if(!f)return;const d=Object.fromEntries(new FormData(f)),p=S.pos.find(x=>x.id===d.p);if(!p)return;const q=cotz(p,+d.por\vert{}\vert{}0,+d.h\vert{}\vert{}0,+d.ex\vert{}\vert{}0,!!d.u);$('#cot').innerHTML=`Costo del pedido ${m(q.C)} · Precio sugerido <b>${m(q.P)}</b> · Ganancia ${m(q.P-q.C)}`}
-function pagoD(id){const x=S.ped.find(y=>y.id===id);dlg.innerHTML=`<div class="dh"><h2>Registrar cobro</h2><button class="x" data-a="close" aria-label="Cerrar">✕</button></div><p class="mu">${esc(x.cl)} · saldo ${m(x.pf-pagado(x))}</p><form data-f="pago" class="row"><input type="hidden" name="id" value="${id}"><label>Monto cobrado<input name="m" type="number" step="any" min="0.01" value="${(x.pf-pagado(x)).toFixed(2)}" required></label><button class="p">Guardar</button></form>`;dlg.showModal()}
-V.comp=()=>{const a=new Date();a.setDate(a.getDate()-((a.getDay()+6)%7));const b=new Date(a);b.setDate(a.getDate()+6);ui.ci=ui.ci||a.toISOString().slice(0,10);ui.cf=ui.cf||b.toISOString().slice(0,10);
-const need={},add=(id,q)=>{const p=S.pos.find(x=>x.id===id);if(p)p.ings.forEach(i=>need[i.i]=(need[i.i]||0)+i.c*q)},lot={};
-S.sal.filter(x=>x.f>=ui.ci&&x.f<=ui.cf&&x.v+x.m+x.d===0).forEach(x=>lot[x.p]=(lot[x.p]||0)+x.c);
-Object.entries(lot).forEach(([id,q])=>add(id,Math.ceil(q/pp(id).porc)));
-S.ped.filter(x=>x.est==='CONFIRMADO'&&x.fe.slice(0,10)>=ui.ci&&x.fe.slice(0,10)<=ui.cf).forEach(x=>add(x.p,x.por/pp(x.p).porc));
-const rows=Object.entries(need).map(([id,q])=>{const i=ins(id);if(!i)return null;const rq=q*1.03,n=Math.ceil(rq/(i.c*U[i.u][0])-1e-9);return{i,rq,n,c:n*i.precio}}).filter(Boolean),T=rows.reduce((a,x)=>a+x.c,0);
-return head('Planificador de compras','La lista de insumos que necesitas para lo que enviarás a vitrina y los pedidos confirmados de la semana.')+`
-<div class="card"><form class="row"><label style="max-width:200px">Desde<input type="date" id="ci" value="${ui.ci}"></label><label style="max-width:200px">Hasta<input type="date" id="cf" value="${ui.cf}"></label></form></div>
-<div class="card tw">${rows.length?`<table><thead><tr><th>Insumo</th><th>Necesitas</th><th>Comprar</th><th>Costo</th></tr></thead><tbody>${rows.map(x=>`<tr><td>${nm(x.i,esc(x.i.n))}</td><td>${Math.round(x.rq)} ${U[x.i.u][1]}</td><td>${x.n} × ${x.i.c} ${x.i.u}</td><td>${m(x.c)}</td></tr>`).join('')}</tbody><tfoot><tr><td colspan="3">Presupuesto de compras</td><td>${m(T)}</td></tr></tfoot></table>`:'<p class="empty">No hay envíos a vitrina sin liquidar ni pedidos confirmados en esas fechas.</p>'}<p class="mu" style="margin-bottom:0">Incluye 3% extra por desperdicio. Esta versión no descuenta lo que ya tienes en bodega.</p></div>`};
-const peH=(k,r)=>{const vs=S.ven.filter(v=>v.f.startsWith(k)),b=vs.length?vs:S.ven,u=b.reduce((a,v)=>a+v.c,0)||1,mc=b.reduce((a,v)=>a+v.c*(v.pr-v.cu),0)/u,pr=b.reduce((a,v)=>a+v.c*v.pr,0)/u,cf=S.gas.filter(x=>x.f.startsWith(k)&&x.tipo!=='VARIABLE').reduce((a,x)=>a+x.m,0)+r.dep,vend=vs.reduce((a,v)=>a+v.c,0);return{mc,pr,cf,pe:mc>0?Math.ceil(cf/mc):0,vend}};
+
+V.vit=()=>`<div class="card"><h3>Envíos a Vitrina</h3><p class="mu">Administra tus puntos de venta minimarket.</p></div>`;
+V.ped=()=>`<div class="card"><h3>Pedidos Especiales</h3><p class="mu">Cotiza y agenda tortas bajo pedido.</p></div>`;
+V.comp=()=>`<div class="card"><h3>Lista de Compras</h3><p class="mu">Insumos proyectados para la semana.</p></div>`;
+V.inv=()=>`<div class="card"><h3>Equipos e Inversiones</h3><p class="mu">Activos y maquinaria de tu negocio.</p></div>`;
+V.gas=()=>`<div class="card"><h3>Gastos Generales</h3><p class="mu">Alquiler, servicios y costos fijos.</p></div>`;
 
 function render(){
-  $('#nav').innerHTML=T.map(([k,t])=>`<button class="${ui.tab===k?'on':''}" data-t="${k}">${t}</button>`).join('');
-  $('#main').innerHTML=(V[ui.tab]||V.panel)();
-  if(ui.tab==='costos')simUpd();
-  if(ui.tab==='ped')cotUpd();
+  const tabActual = T.find(t=>t[0]===ui.tab)||T[0];
+  $('#hdr-title').textContent = tabActual[1];
+  $('#hdr-sub').textContent = 'Belu Pastelería';
+
+  $('#nav').innerHTML = T.map(([k,t,ic])=>`
+    <button class="nav-item ${ui.tab===k?'active':''}" data-t="${k}">
+      <div class="nav-icon">${ic}</div>
+      <span>${t}</span>
+    </button>
+  `).join('');
+
+  $('#main').innerHTML = (V[ui.tab]||V.panel)();
 }
 
 document.addEventListener('click',e=>{
-  const t=e.target.closest('[data-t]');if(t){ui.tab=t.dataset.t;render();return}
-  const a=e.target.closest('[data-a]');if(!a)return;
-  const act=a.dataset.a,id=a.dataset.id;
-  if(act==='editIns'){ui.eIns=id;render()}
-  else if(act==='cancelIns'){ui.eIns=null;render()}
-  else if(act==='delIns'){S.ins=S.ins.filter(i=>i.id!==id);save();render()}
-  else if(act==='delVen'){S.ven=S.ven.filter(v=>v.id!==id);save();render()}
-  else if(act==='delInv'){S.inv=S.inv.filter(x=>x.id!==id);save();render()}
-  else if(act==='delPun'){S.pun=S.pun.filter(x=>x.id!==id);save();render()}
-  else if(act==='delSal'){S.sal=S.sal.filter(x=>x.id!==id);save();render()}
-  else if(act==='delPed'){S.ped=S.ped.filter(x=>x.id!==id);save();render()}
-  else if(act==='liq')liq(id);
-  else if(act==='pagoD')pagoD(id);
-  else if(act==='conf'){const p=S.ped.find(x=>x.id===id);if(p){p.est='CONFIRMADO';save();render()}}
-  else if(act==='ent'){const p=S.ped.find(x=>x.id===id);if(p){p.est='ENTREGADO';save();render()}}
-  else if(act==='close')dlg.close();
+  const t=e.target.closest('[data-t]'); if(t){ui.tab=t.dataset.t; render(); return;}
+  const a=e.target.closest('[data-a]'); if(!a)return;
+  const act=a.dataset.a, id=a.dataset.id;
+  if(act==='editIns'){ui.eIns=id; render();}
+  else if(act==='delIns'){S.ins=S.ins.filter(i=>i.id!==id); save(); render();}
+  else if(act==='delVen'){S.ven=S.ven.filter(v=>v.id!==id); save(); render();}
 });
 
 document.addEventListener('submit',e=>{
-  const f=e.target.closest('[data-f]');if(!f)return;
+  const f=e.target.closest('[data-f]'); if(!f)return;
   e.preventDefault();
-  const d=Object.fromEntries(new FormData(f)),k=f.dataset.f;
-  if(k==='cfg'){S.cfg.cap=+d.cap;S.cfg.mar=+d.mar;S.cfg.tar=+d.tar;S.cfg.mp=+d.mp;S.cfg.mon=d.mon;save();render()}
-  else if(k==='ins'){
-    if(d.id){const i=ins(d.id);i.n=d.n;i.c=+d.c;i.u=d.u;i.precio=+d.p;ui.eIns=null}
-    else{S.ins.push({id:uid(),n:d.n,c:+d.c,u:d.u,precio:+d.p})}
-    save();render();
+  const d=Object.fromEntries(new FormData(f)), k=f.dataset.f;
+  if(k==='ins'){
+    if(d.id){const i=ins(d.id); i.n=d.n; i.c=+d.c; i.u=d.u; i.precio=+d.p; ui.eIns=null;}
+    else{S.ins.push({id:uid(),n:d.n,c:+d.c,u:d.u,precio:+d.p});}
+    save(); render();
   }
-  else if(k==='ven'){S.ven.push({id:uid(),f:d.f,p:d.p,c:+d.c,pr:+d.pr,cu:calc(S.pos.find(x=>x.id===d.p)).porc});save();render()}
-  else if(k==='inv'){S.inv.push({id:uid(),f:d.f,n:d.n,m:+d.m,vu:+d.vu||36});save();render()}
-  else if(k==='pun'){S.pun.push({id:uid(),n:d.n,k:+d.k});save();render()}
-  else if(k==='sal'){S.sal.push({id:uid(),f:d.f,pu:d.pu,p:d.p,c:+d.c,pvp:+d.pvp,v:0,m:0,d:0});save();render()}
-  else if(k==='liq'){const s=S.sal.find(x=>x.id===d.id);s.v+=+d.v;s.m+=+d.mm;s.d+=+d.d;dlg.close();save();render()}
-  else if(k==='ped'){
-    const p=S.pos.find(x=>x.id===d.p),q=cotz(p,+d.por||0,+d.h||0,+d.ex||0,!!d.u);
-    S.ped.push({id:uid(),cl:d.cl,fe:d.fe,p:d.p,por:+d.por,h:+d.h,ex:+d.ex,u:!!d.u,pf:+d.pf||q.P,est:'COTIZADO',pag:[]});
-    save();render();
+  else if(k==='ven'){
+    S.ven.push({id:uid(),f:today(),p:d.p,c:+d.c,pr:+d.pr,cu:calc(S.pos.find(x=>x.id===d.p)).porc});
+    save(); render();
   }
-  else if(k==='pago'){const p=S.ped.find(x=>x.id===d.id);p.pag.push({f:today(),m:+d.m});dlg.close();save();render()}
 });
 
-// Persistencia de sesión activa en la app
 function guardarSesionActiva(){
   localStorage.setItem('usuarioLogueado','true');
 }
