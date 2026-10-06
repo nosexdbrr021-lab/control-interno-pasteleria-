@@ -4,6 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Belu Pastelería</title>
+
+<!-- Agregado para PWA / Pantalla Completa -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1A1114">
+
+<!-- Agregado para exportar a PDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=DM+Sans:wght@400;500;700&display=swap">
 <style>
 :root{--bg:#F9F5F0;--card:#fff;--ch:#2A1A1E;--chx:#F3EAE2;--ro:#8E3A52;--rs:#F5E6E9;--ln:#E6DACF;--tx:#2A1A1E;--mu:#7C6B66;--ok:#2F7D5B;--no:#B3382C;--au:#B8935A;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -218,7 +226,7 @@ return head('Pedidos especiales','Tortas y encargos con fecha de entrega. El cot
 <div class="grid"><div class="k"><span>Anticipos de clientes (aún no es ingreso)</span><b>${m(ab.reduce((a,x)=>a+pagado(x),0))}</b></div><div class="k"><span>Por cobrar</span><b>${m(ab.reduce((a,x)=>a+x.pf-pagado(x),0))}</b></div><div class="k"><span>Pedidos pendientes</span><b>${ab.length}</b></div></div>
 <div class="card"><h3>Nuevo pedido</h3>${p0?`<form class="row" data-f="ped"><label style="flex:2">Cliente<input name="cl" required></label><label>Entrega<input name="fe" type="datetime-local" value="${today()}T12:00" required></label><label style="flex:2">Postre base${sel(S.pos,'p')}</label><label>Porciones<input name="por" type="number" min="1" value="12" required></label><label>Horas de decoración<input name="h" type="number" step="any" min="0" value="1"></label><label>Empaque y toppers (monto)<input name="ex" type="number" step="any" min="0" value="0"></label><label style="flex:none;flex-direction:row;align-items:center"><input type="checkbox" name="u" style="width:auto"> Urgente</label><label>Precio final (vacío = sugerido)<input name="pf" type="number" step="any" min="0"></label><button class="p">Guardar pedido</button></form><p id="cot" style="margin:12px 0 0"></p>`:'<p class="empty">Primero crea un postre.</p>'}</div>
 <div class="card tw">${v.length?`<table><thead><tr><th>Entrega</th><th>Cliente</th><th>Pedido</th><th>Precio</th><th>Pagado</th><th>Saldo</th><th>Pago</th><th>Estado</th><th></th></tr></thead><tbody>${v.map(x=>{const g=pagado(x),pg=g<=0?'Pendiente':g<x.pf?'Adelanto':'Pagado',cr=x.est!=='ENTREGADO'&&x.pf-g>0&&new Date(x.fe)-Date.now()<1728e5;return`<tr><td>${x.fe.replace('T',' ')}${cr?' ⚠':''}</td><td>${esc(x.cl)}</td><td>${esc(pp(x.p).n)} × ${x.por}</td><td>${m(x.pf)}</td><td>${m(g)}</td><td>${m(x.pf-g)}</td><td>${pg}</td><td>${x.est==='ENTREGADO'?'Entregado':x.est==='CONFIRMADO'?'Confirmado':'Cotizado'}</td><td>${x.est==='COTIZADO'?`<button class="l" data-a="conf" data-id="${x.id}">Confirmar</button>`:''}${x.est!=='ENTREGADO'?`<button class="l" data-a="pagoD" data-id="${x.id}">Cobrar</button><button class="l" data-a="ent" data-id="${x.id}">Entregar</button>`:''}<button class="l" data-a="delPed" data-id="${x.id}">Eliminar</button></td></tr>`}).join('')}</tbody></table>`:'<p class="empty">Sin pedidos todavía.</p>'}</div>`};
-function cotUpd(){const f=$('[data-f=ped]');if(!f)return;const d=Object.fromEntries(new FormData(f)),p=S.pos.find(x=>x.id===d.p);if(!p)return;const q=cotz(p,+d.por||0,+d.h||0,+d.ex||0,!!d.u);$('#cot').innerHTML=`Costo del pedido ${m(q.C)} · Precio sugerido <b>${m(q.P)}</b> · Ganancia ${m(q.P-q.C)}`}
+function cotUpd(){const f=$('[data-f=ped]');if(!f)return;const d=Object.fromEntries(new FormData(f)),p=S.pos.find(x=>x.id===d.p);if(!p)return;const q=cotz(p,+d.por\vert{}\vert{}0,+d.h\vert{}\vert{}0,+d.ex\vert{}\vert{}0,!!d.u);$('#cot').innerHTML=`Costo del pedido ${m(q.C)} · Precio sugerido <b>${m(q.P)}</b> · Ganancia ${m(q.P-q.C)}`}
 function pagoD(id){const x=S.ped.find(y=>y.id===id);dlg.innerHTML=`<div class="dh"><h2>Registrar cobro</h2><button class="x" data-a="close" aria-label="Cerrar">✕</button></div><p class="mu">${esc(x.cl)} · saldo ${m(x.pf-pagado(x))}</p><form data-f="pago" class="row"><input type="hidden" name="id" value="${id}"><label>Monto cobrado<input name="m" type="number" step="any" min="0.01" value="${(x.pf-pagado(x)).toFixed(2)}" required></label><button class="p">Guardar</button></form>`;dlg.showModal()}
 V.comp=()=>{const a=new Date();a.setDate(a.getDate()-((a.getDay()+6)%7));const b=new Date(a);b.setDate(a.getDate()+6);ui.ci=ui.ci||a.toISOString().slice(0,10);ui.cf=ui.cf||b.toISOString().slice(0,10);
 const need={},add=(id,q)=>{const p=S.pos.find(x=>x.id===id);if(p)p.ings.forEach(i=>need[i.i]=(need[i.i]||0)+i.c*q)},lot={};
@@ -231,111 +239,112 @@ return head('Planificador de compras','La lista de insumos que necesitas para lo
 <div class="card tw">${rows.length?`<table><thead><tr><th>Insumo</th><th>Necesitas</th><th>Comprar</th><th>Costo</th></tr></thead><tbody>${rows.map(x=>`<tr><td>${nm(x.i,esc(x.i.n))}</td><td>${Math.round(x.rq)} ${U[x.i.u][1]}</td><td>${x.n} × ${x.i.c} ${x.i.u}</td><td>${m(x.c)}</td></tr>`).join('')}</tbody><tfoot><tr><td colspan="3">Presupuesto de compras</td><td>${m(T)}</td></tr></tfoot></table>`:'<p class="empty">No hay envíos a vitrina sin liquidar ni pedidos confirmados en esas fechas.</p>'}<p class="mu" style="margin-bottom:0">Incluye 3% extra por desperdicio. Esta versión no descuenta lo que ya tienes en bodega.</p></div>`};
 const peH=(k,r)=>{const vs=S.ven.filter(v=>v.f.startsWith(k)),b=vs.length?vs:S.ven,u=b.reduce((a,v)=>a+v.c,0)||1,mc=b.reduce((a,v)=>a+v.c*(v.pr-v.cu),0)/u,pr=b.reduce((a,v)=>a+v.c*v.pr,0)/u,cf=S.gas.filter(x=>x.f.startsWith(k)&&x.tipo!=='VARIABLE').reduce((a,x)=>a+x.m,0)+r.dep,vend=vs.reduce((a,v)=>a+v.c,0);
 if(mc<=0)return'<div class="card"><h3>Punto de equilibrio</h3><p class="neg">No alcanzable: revisa tus precios o comisiones.</p></div>';
-const pe=Math.max(1,Math.ceil(cf/mc));return`<div class="card"><h3>Punto de equilibrio</h3><div class="grid" style="margin:0"><div class="k"><span>Costos fijos del mes</span><b>${m(cf)}</b></div><div class="k"><span>Porciones mínimas para no perder</span><b>${pe}</b></div><div class="k"><span>Ventas mínimas</span><b>${m(pe*pr)}</b></div><div class="k"><span>Avance del mes</span><b class="${vend>=pe?'pos':'neg'}">${Math.round(vend/pe*100)}%</b></div></div><p class="mu" style="margin:10px 0 0">Costos fijos = gastos fijos + depreciación de equipos.</p></div>`};
-V.gas=()=>{
-  const v=[...S.gas].sort((a,b)=>b.f.localeCompare(a.f));
-  return head('Gastos generales','Alquiler, luz, agua, gas, sueldos y cualquier gasto del negocio. Se restan de tu ganancia y de tu capital.')+`
-  <div class="card"><h3>Nuevo gasto</h3><form class="row" data-f="gas"><label>Fecha<input name="f" type="date" value="${today()}" required></label><label style="flex:2">Concepto<input name="n" required></label><label>Tipo<select name="t"><option value="FIJO">Fijo (alquiler, luz)</option><option value="VARIABLE">Variable</option></select></label><label>Monto<input name="m" type="number" step="any" min="0" required></label><button class="p">Agregar</button></form></div>
-  <div class="card tw">${v.length?`<table><thead><tr><th>Fecha</th><th>Concepto</th><th>Monto</th><th></th></tr></thead><tbody>${v.map(x=>`<tr><td>${fd8(x.f)}</td><td>${esc(x.n)}</td><td>${m(x.m)}</td><td><button class="l" data-a="delGas" data-id="${x.id}">Eliminar</button></td></tr>`).join('')}</tbody><tfoot><tr><td colspan="2">Total de gastos</td><td colspan="2">${m(S.gas.reduce((a,x)=>a+x.m,0))}</td></tr></tfoot></table>`:'<p class="empty">Aún no registraste gastos.</p>'}</div>`;
-};
-V.res=()=>{
-  const k=ui.mes,r=R(v=>v.f.startsWith(k),k),t=r,iv=r.iv,g=r.cos+r.mer+r.gas+r.dep,net=r.net;
-  const by=S.pos.map(p=>({n:p.n,...tot(v=>v.f.startsWith(k)&&v.p===p.id),u:S.ven.filter(v=>v.f.startsWith(k)&&v.p===p.id).reduce((a,v)=>a+v.c,0)})).filter(x=>x.u>0);
-  return head('Resumen mensual','Cuánto gastaste y cuánto generaste en el mes.')+`
-  <div class="card"><form class="row"><label style="max-width:220px">Mes<input type="month" id="mes" value="${k}"></label></form></div>
-  <div class="grid"><div class="k"><span>Ingresos (dinero de tus ventas)</span><b>${m(t.ing)}</b></div><div class="k"><span>Gastado en insumos</span><b>${m(t.cos)}</b></div><div class="k"><span>Gastos generales</span><b>${m(r.gas)}</b></div><div class="k"><span>Depreciación del mes</span><b>${m(r.dep)}</b></div><div class="k"><span>Mermas de vitrina</span><b>${m(r.mer)}</b></div><div class="k"><span>Comisiones del minimarket</span><b>${m(r.com)}</b></div><div class="k"><span>Gasto total</span><b>${m(g)}</b></div><div class="k"><span>${gp(net)} neta</span><b class="${cls(net)}">${m(Math.abs(net))}</b></div></div>
-  <div class="card tw"><h3>Estado de resultados del mes</h3>${edr(r)}</div>
-  ${peH(k,r)}<div class="card tw"><h3>Detalle por postre</h3>${by.length?`<table><thead><tr><th>Postre</th><th>Unidades</th><th>Ingresos</th><th>Gasto en insumos</th><th>Ganancia</th></tr></thead><tbody>${by.map(x=>`<tr><td>${esc(x.n)}</td><td>${x.u}</td><td>${m(x.ing)}</td><td>${m(x.cos)}</td><td class="${cls(x.gan)}">${m(x.gan)}</td></tr>`).join('')}</tbody><tfoot><tr><td>Total</td><td>${by.reduce((a,x)=>a+x.u,0)}</td><td>${m(t.ing)}</td><td>${m(t.cos)}</td><td>${m(t.gan)}</td></tr></tfoot></table>`:'<p class="empty">No hay ventas en este mes.</p>'}<p class="mu" style="margin-bottom:0">Resultado neto = ventas − insumos − mermas − gastos generales − depreciación. Los equipos no se restan de golpe: se reparten mes a mes.</p></div>`;
-};
-function render(){
-  $('#nav').innerHTML=T.map(([k,l])=>`<button data-a="tab" data-id="${k}" class="${ui.tab===k?'on':''}">${l}</button>`).join('');
-  $('#main').innerHTML=V[ui.tab]();
-  if(ui.tab==='costos')simUpd();
-  if(ui.tab==='ped')cotUpd();
-}
-function ver(id){
-  const p=S.pos.find(x=>x.id===id),c=calc(p);
-  dlg.innerHTML=`<div class="dh"><span class="nm">${th(p,'lg')}<h2>${esc(p.n)}</h2></span><button class="x" data-a="close" aria-label="Cerrar">✕</button></div><p class="mu" style="margin:0">Rinde ${p.porc} porciones</p>
-  <h3>Ingredientes</h3><table><tbody>${p.ings.map(r=>{const i=ins(r.i);return i?`<tr><td>${nm(i,esc(i.n))}</td><td>${r.c} ${U[i.u][1]}</td><td>${m(cb(i)*r.c)}</td></tr>`:''}).join('')}</tbody></table>
-  <h3>Preparación</h3>${p.pasos.trim()?`<ol>${p.pasos.split('\n').filter(s=>s.trim()).map(s=>`<li>${esc(s)}</li>`).join('')}</ol>`:'<p class="mu">Sin pasos registrados.</p>'}
-  <div class="sum"><span>Gasto en insumos</span><b>${m(c.insumos)}</b><span>Costo total (con empaque y otros)</span><b>${m(c.total)}</b><span>Costo por porción</span><b>${m(c.porc)}</b><span>Margen de ganancia</span><b>${p.mar}%</b><span>Precio de venta (calculado)</span><b>${m(c.precio)}</b><span>Ganancia por porción</span><b class="${cls(c.gan)}">${m(c.gan)}</b></div>
-  <div class="act"><button class="dg" data-a="delPos" data-id="${id}">Eliminar</button><button class="p" data-a="editPos" data-id="${id}">Editar</button></div>`;
-  dlg.showModal();
-}
-const rowH=r=>`<div class="ir"><select name="i" required><option value="">Elige un insumo</option>${S.ins.map(i=>`<option value="${i.id}" ${i.id===r.i?'selected':''}>${esc(i.n)} (${U[i.u][1]})</option>`).join('')}</select><input name="c" type="number" step="any" min="0" placeholder="Cantidad" value="${r.c}" required><button type="button" class="x" data-a="delRow" aria-label="Quitar">✕</button></div>`;
-function edit(id){
-  const p=id?S.pos.find(x=>x.id===id):{id:'',n:'',porc:8,ings:[{i:'',c:''}],pasos:'',emp:.3,otros:0,mar:S.cfg.mar,precio:0};
-  dlg.innerHTML=`<div class="dh"><h2>${id?'Editar postre':'Nuevo postre'}</h2><button class="x" data-a="close" aria-label="Cerrar">✕</button></div>
-  <form data-f="post"><input type="hidden" name="id" value="${p.id}"><div class="row"><label style="flex:3">Nombre<input name="n" value="${esc(p.n)}" required></label><label>Porciones que rinde<input name="porc" type="number" min="1" value="${p.porc}" required></label></div>
-  <h3>Ingredientes</h3><div id="rows">${p.ings.map(rowH).join('')}</div>${S.ins.length?'':'<p class="mu">Primero agrega insumos en la pestaña Insumos.</p>'}<button type="button" class="s" data-a="addRow">Agregar ingrediente</button>
-  <h3>Preparación (un paso por línea)</h3><textarea name="pasos" rows="5">${esc(p.pasos)}</textarea>
-  <h3>Costos extra y precio</h3><div class="row"><label>Empaque por porción<input name="emp" type="number" step="any" min="0" value="${p.emp}"></label><label>Otros por receta (gas, mano de obra)<input name="otros" type="number" step="any" min="0" value="${p.otros}"></label><label>Margen de ganancia %<input name="mar" type="number" min="0" value="${p.mar}"></label><label>Foto (opcional)<input name="foto" type="file" accept="image/*"></label></div>
-  <div class="act"><button type="button" class="s" data-a="close">Cancelar</button><button class="p">Guardar postre</button></div></form>`;
-  if(!dlg.open)dlg.showModal();
-}
-const upd=(arr,o)=>{const k=arr.findIndex(x=>x.id===o.id);k>=0?arr[k]=o:arr.push(o)};
-const F={
-  cfg(d){S.cfg.cap=+d.cap;S.cfg.mon=d.mon||'S/';S.cfg.tar=+d.tar||0;S.cfg.mp=+d.mp||0;S.cfg.mar=+d.mar||0;S.pos.forEach(p=>p.mar=S.cfg.mar)},
-  ins(d,f,fd,img){upd(S.ins,{id:d.id||uid(),n:d.n,c:+d.c,u:d.u,precio:+d.p,img:img||(ins(d.id)||{}).img});ui.eIns=null},
-  ven(d){const p=S.pos.find(x=>x.id===d.p);S.ven.push({id:uid(),f:d.f,p:d.p,c:+d.c,pr:+d.pr,cu:calc(p).porc})},
-  inv(d,f,fd,img){S.inv.push({id:uid(),f:d.f,n:d.n,m:+d.m,img,vu:+d.vu||36})},
-  gas(d){S.gas.push({id:uid(),f:d.f,n:d.n,m:+d.m,tipo:d.t||'FIJO'})},
-  pun(d){S.pun.push({id:uid(),n:d.n,k:+d.k})},
-  sal(d){S.sal.push({id:uid(),pu:d.pu,p:d.p,f:d.f,c:+d.c,pvp:+d.pvp,cu:calc(pp(d.p)).porc,v:0,m:0,d:0})},
-  liq(d){const s=S.sal.find(x=>x.id===d.id),u=pu(s.pu);let e=s.c-s.v-s.m-s.d;const v=Math.min(+d.v||0,e);e-=v;const mm=Math.min(+d.mm||0,e);e-=mm;const dv=Math.min(+d.d||0,e);
-    if(v>0)S.ven.push({id:uid(),f:today(),p:s.p,c:v,pr:s.pvp*(1-u.k/100),cu:s.cu,o:'VITRINA',com:s.pvp*u.k/100,pl:s.pvp});
-    if(mm>0)S.mer.push({id:uid(),f:today(),p:s.p,c:mm,cos:mm*s.cu});
-    s.v+=v;s.m+=mm;s.d+=dv;dlg.close()},
-  ped(d){const p=pp(d.p),q=cotz(p,+d.por,+d.h||0,+d.ex||0,!!d.u);S.ped.push({id:uid(),cl:d.cl,fe:d.fe,p:d.p,por:+d.por,cd:q.C,sug:q.P,pf:+d.pf||q.P,est:'COTIZADO',pag:[]})},
-  pago(d){S.ped.find(x=>x.id===d.id).pag.push({f:today(),m:+d.m});dlg.close()},
-  post(d,f,fd,img){
-    const ci=fd.getAll('c'),ings=fd.getAll('i').map((x,k)=>({i:x,c:+ci[k]})).filter(r=>r.i&&r.c>0);
-    const o={id:d.id||uid(),n:d.n,porc:Math.max(1,+d.porc),ings,pasos:d.pasos,emp:+d.emp||0,otros:+d.otros||0,mar:+d.mar||0,precio:0,img:img||(S.pos.find(x=>x.id===d.id)||{}).img};
-    upd(S.pos,o);dlg.close();save();render();ver(o.id);return 1;
-  }
-};
-const A={
-  tab(id){ui.tab=id},
-  close(){dlg.close();return 1},
-  editIns(id){ui.eIns=id},cancelIns(){ui.eIns=null},
-  delIns(id){if(!confirm('¿Eliminar este insumo? Las recetas que lo usan dejarán de contarlo.'))return 1;S.ins=S.ins.filter(i=>i.id!==id)},
-  delVen(id){S.ven=S.ven.filter(x=>x.id!==id)},
-  delInv(id){S.inv=S.inv.filter(x=>x.id!==id)},delGas(id){S.gas=S.gas.filter(x=>x.id!==id)},
-  delPun(id){S.pun=S.pun.filter(x=>x.id!==id)},delSal(id){S.sal=S.sal.filter(x=>x.id!==id)},delPed(id){S.ped=S.ped.filter(x=>x.id!==id)},
-  liq(id){liq(id);return 1},pagoD(id){pagoD(id);return 1},
-  conf(id){S.ped.find(x=>x.id===id).est='CONFIRMADO'},
-  ent(id){const x=S.ped.find(y=>y.id===id);x.est='ENTREGADO';S.ven.push({id:uid(),f:today(),p:x.p,c:x.por,pr:x.pf/x.por,cu:x.cd/x.por,o:'PEDIDO'})},
-  newPos(){edit('');return 1},
-  ver(id){ver(id);return 1},
-  editPos(id){edit(id);return 1},
-  delPos(id){if(!confirm('¿Eliminar este postre?'))return 1;S.pos=S.pos.filter(p=>p.id!==id);dlg.close()},
-  addRow(){$('#rows').insertAdjacentHTML('beforeend',rowH({i:'',c:''}));return 1},
-  delRow(id,t){t.closest('.ir').remove();return 1}
-};
+const pe=Math.max(1,Math.ceil(cf/mc));return`<div class="card"><h3>Punto de equilibrio</h3><div class="grid" style="margin:0"><div class="k"><span>Costos fijos del mes</span><b>${m(cf)}</b></div><div class="k"><span>Ganancia promedio por postre</span><b>${m(mc)}</b></div><div class="k"><span>Debes vender para no perder</span><b>${pe} porciones</b></div><div class="k"><span>Ventas reales este mes</span><b class="${vend>=pe?'pos':'neg'}">${vend} porciones</b></div></div></div>`};
+V.gas=()=>{const v=[...S.gas].sort((a,b)=>b.f.localeCompare(a.f));
+return head('Gastos generales','Alquiler, luz, agua, internet, transporte y otros gastos del negocio.')+`
+<div class="card"><h3>Nuevo gasto</h3><form class="row" data-f="gas"><label>Fecha<input name="f" type="date" value="${today()}" required></label><label style="flex:2">Descripción<input name="n" required></label><label>Monto<input name="m" type="number" step="any" min="0" required></label><label>Tipo<select name="tipo"><option value="FIJO">Fijo (alquiler, servicios)</option><option value="VARIABLE">Variable (transporte, imprevistos)</option></select></label><button class="p">Agregar</button></form></div>
+<div class="card tw">${v.length?`<table><thead><tr><th>Fecha</th><th>Descripción</th><th>Tipo</th><th>Monto</th><th></th></tr></thead><tbody>${v.map(x=>`<tr><td>${fd8(x.f)}</td><td>${esc(x.n)}</td><td>${x.tipo}</td><td>${m(x.m)}</td><td><button class="l" data-a="delGas" data-id="${x.id}">Eliminar</button></td></tr>`).join('')}</tbody></table>`:'<p class="empty">Sin gastos registrados.</p>'}</div>`};
+V.res=()=>{const k=ui.mes,r=R(x=>x.f.startsWith(k),k);
+return head('Resumen mensual','Selecciona un mes para ver tu balance detallado.')+`
+<div class="card"><form class="row"><label style="max-width:200px">Mes<input type="month" id="rmes" value="${k}"></label></form></div>
+<div class="card tw"><h3>Estado de resultados de ${mesN(k)}</h3>${edr(r)}</div>${peH(k,r)}`};
+function renderNav(){$('#nav').innerHTML=T.map(([id,t])=>`<button class="${id===ui.tab?'on':''}" data-tab="${id}">${t}</button>`).join('')}
+function render(){renderNav();$('#main').innerHTML=V[ui.tab]();if(ui.tab==='costos')simUpd();if(ui.tab==='ped')cotUpd()}
 document.addEventListener('click',e=>{
-  const t=e.target.closest('[data-a]');
-  if(!t){if(e.target===dlg)dlg.close();return}
-  const skip=A[t.dataset.a](t.dataset.id,t);
-  if(!skip){save();render()}
-});
-const shrink=file=>new Promise(res=>{const fr=new FileReader();fr.onerror=()=>res(null);fr.onload=()=>{const im=new Image();im.onerror=()=>res(null);im.onload=()=>{const c=document.createElement('canvas'),z=160,q=Math.min(im.width,im.height);c.width=c.height=z;c.getContext('2d').drawImage(im,(im.width-q)/2,(im.height-q)/2,q,q,0,0,z,z);res(c.toDataURL('image/jpeg',.78))};im.src=fr.result};fr.readAsDataURL(file)});
-document.addEventListener('submit',async e=>{
-  e.preventDefault();
-  const f=e.target,fd=new FormData(f),file=fd.get('foto');
-  const img=file&&file.size?await shrink(file):null;
-  const skip=F[f.dataset.f](Object.fromEntries(fd),f,fd,img);
-  if(!skip){save();render()}
+  const b=e.target.closest('button, [data-tab]');if(!b)return;
+  if(b.dataset.tab){ui.tab=b.dataset.tab;render();return}
+  const a=b.dataset.a,id=b.dataset.id;
+  if(a==='close')dlg.close();
+  if(a==='editIns'){ui.eIns=id;render()}
+  if(a==='cancelIns'){ui.eIns=null;render()}
+  if(a==='delIns'){S.ins=S.ins.filter(i=>i.id!==id);save();render()}
+  if(a==='delInv'){S.inv=S.inv.filter(i=>i.id!==id);save();render()}
+  if(a==='delGas'){S.gas=S.gas.filter(i=>i.id!==id);save();render()}
+  if(a==='delVen'){S.ven=S.ven.filter(i=>i.id!==id);save();render()}
+  if(a==='delPun'){S.pun=S.pun.filter(i=>i.id!==id);save();render()}
+  if(a==='delSal'){S.sal=S.sal.filter(i=>i.id!==id);save();render()}
+  if(a==='delPed'){S.ped=S.ped.filter(i=>i.id!==id);save();render()}
+  if(a==='newPos')openPos();
+  if(a==='ver')openPos(id);
+  if(a==='liq')liq(id);
+  if(a==='pagoD')pagoD(id);
+  if(a==='conf'){const p=S.ped.find(x=>x.id===id);if(p){p.est='CONFIRMADO';save();render()}}
+  if(a==='ent'){const p=S.ped.find(x=>x.id===id);if(p){p.est='ENTREGADO';S.ven.push({id:uid(),f:today(),p:p.p,c:p.por,pr:p.pf/p.por,cu:calc(pp(p.p)).porc});save();render()}}
 });
 document.addEventListener('input',e=>{
   if(e.target.dataset.sim){ui.sim[e.target.dataset.sim]=e.target.value;simUpd()}
-  if(e.target.form&&e.target.form.dataset.f==='ped')cotUpd();
+  if(e.target.id==='vp'){const p=S.pos.find(x=>x.id===e.target.value);if(p&&$('#vpr'))$('#vpr').value=calc(p).precio.toFixed(2)}
+  if(e.target.id==='sp'||e.target.id==='spu'){const p=S.pos.find(x=>x.id===$('#sp')?.value),u=S.pun.find(x=>x.id===$('#spu')?.value);if(p&&u&&$('#spvp'))$('#spvp').value=pvpV(p,u.k).toFixed(2)}
+  if(e.target.closest('[data-f=ped]'))cotUpd();
+  if(e.target.id==='rmes'){ui.mes=e.target.value;render()}
+  if(e.target.id==='ci'){ui.ci=e.target.value;render()}
+  if(e.target.id==='cf'){ui.cf=e.target.value;render()}
 });
-document.addEventListener('change',e=>{
-  if(e.target.id==='vp'){const p=S.pos.find(x=>x.id===e.target.value);$('#vpr').value=calc(p).precio.toFixed(2)}
-  if(e.target.id==='mes'&&e.target.value){ui.mes=e.target.value;render()}
-  if(e.target.id==='sp'||e.target.id==='spu'){$('#spvp').value=pvpV(pp($('#sp').value),pu($('#spu').value).k).toFixed(2)}
-  if((e.target.id==='ci'||e.target.id==='cf')&&e.target.value){ui[e.target.id]=e.target.value;render()}
+const readF=f=>new Promise(r=>{if(!f)return r('');const rd=new FileReader();rd.onload=()=>r(rd.result);rd.readAsDataURL(f)});
+document.addEventListener('submit',async e=>{
+  e.preventDefault();const form=e.target,f=form.dataset.f,d=Object.fromEntries(new FormData(form));
+  if(f==='cfg'){S.cfg.cap=+d.cap||0;S.cfg.mar=+d.mar||0;S.cfg.tar=+d.tar||0;S.cfg.mp=+d.mp||0;S.cfg.mon=d.mon||'S/';save();render()}
+  if(f==='ins'){const img=form.foto?.files[0]?await readF(form.foto.files[0]):(S.ins.find(i=>i.id===d.id)?.img||'');if(d.id){const i=S.ins.find(x=>x.id===d.id);Object.assign(i,{n:d.n,c:+d.c,u:d.u,precio:+d.p,img});ui.eIns=null}else S.ins.push({id:uid(),n:d.n,c:+d.c,u:d.u,precio:+d.p,img});save();render()}
+  if(f==='inv'){const img=form.foto?.files[0]?await readF(form.foto.files[0]):'';S.inv.push({id:uid(),f:d.f,n:d.n,m:+d.m,vu:+d.vu||36,img});save();render()}
+  if(f==='gas'){S.gas.push({id:uid(),f:d.f,n:d.n,m:+d.m,tipo:d.tipo});save();render()}
+  if(f==='ven'){const p=S.pos.find(x=>x.id===d.p);S.ven.push({id:uid(),f:d.f,p:d.p,c:+d.c,pr:+d.pr,cu:calc(p).porc});save();render()}
+  if(f==='pun'){S.pun.push({id:uid(),n:d.n,k:+d.k});save();render()}
+  if(f==='sal'){S.sal.push({id:uid(),f:d.f,pu:d.pu,p:d.p,c:+d.c,pvp:+d.pvp,v:0,m:0,d:0});save();render()}
+  if(f==='liq'){const s=S.sal.find(x=>x.id===d.id),v=+d.v||0,mm=+d.mm||0,dev=+d.d||0;s.v+=v;s.m+=mm;s.d+=dev;if(v>0)S.ven.push({id:uid(),f:today(),p:s.p,c:v,pr:s.pvp*(1-pu(s.pu).k/100),cu:calc(pp(s.p)).porc,com:s.pvp*(pu(s.pu).k/100)});if(mm>0)S.mer.push({id:uid(),f:today(),p:s.p,c:mm,cos:mm*calc(pp(s.p)).porc});save();dlg.close();render()}
+  if(f==='ped'){const p=S.pos.find(x=>x.id===d.p),q=cotz(p,+d.por||0,+d.h||0,+d.ex||0,!!d.u),pf=+d.pf||q.P;S.ped.push({id:uid(),cl:d.cl,fe:d.fe,p:d.p,por:+d.por,h:+d.h,ex:+d.ex,u:!!d.u,pf,est:'COTIZADO',pag:[]});save();render()}
+  if(f==='pago'){const p=S.ped.find(x=>x.id===d.id);p.pag.push({f:today(),m:+d.m});if(p.est==='COTIZADO')p.est='CONFIRMADO';save();dlg.close();render()}
+  if(f==='pos'){
+    const ings=[];form.querySelectorAll('.ir').forEach(r=>{const i=r.querySelector('select').value,c=+r.querySelector('input').value||0;if(c>0)ings.push({i,c})});
+    const img=form.foto?.files[0]?await readF(form.foto.files[0]):(S.pos.find(x=>x.id===d.id)?.img||'');
+    const data={n:d.n,porc:+d.porc||1,emp:+d.emp||0,otros:+d.otros||0,mar:+d.mar||0,precio:+d.precio||0,pasos:d.pasos,ings,img};
+    if(d.id){const p=S.pos.find(x=>x.id===d.id);Object.assign(p,data)}else S.pos.push({id:uid(),...data});
+    save();dlg.close();render();
+  }
 });
+function openPos(id){
+  const p=S.pos.find(x=>x.id===id)||{id:'',n:'',porc:8,emp:0.3,otros:2,mar:S.cfg.mar,precio:0,pasos:'',ings:[{i:S.ins[0]?.id||'',c:100}],img:''};
+  const c=calc(p);
+  dlg.innerHTML=`
+  <div class="dh"><h2>${p.id?esc(p.n):'Nuevo postre'}</h2><button class="x" data-a="close" aria-label="Cerrar">✕</button></div>
+  <form data-f="pos">
+    <input type="hidden" name="id" value="${p.id}">
+    <div class="row">
+      <label style="flex:2">Nombre del postre<input name="n" value="${esc(p.n)}" required></label>
+      <label>Porciones por receta<input name="porc" type="number" min="1" value="${p.porc}" required></label>
+      <label>Foto (opcional)<input name="foto" type="file" accept="image/*"></label>
+    </div>
+    <h3>Ingredientes</h3>
+    <div id="il">${p.ings.map((r,idx)=>irH(r,idx)).join('')}</div>
+    <button type="button" class="s" id="addI" style="margin-bottom:12px">+ Agregar ingrediente</button>
+    <div class="row">
+      <label>Empaque por porción<input name="emp" type="number" step="any" min="0" value="${p.emp}"></label>
+      <label>Gas/mano de obra (por receta)<input name="otros" type="number" step="any" min="0" value="${p.otros}"></label>
+      <label>Margen de ganancia (%)<input name="mar" type="number" min="0" value="${p.mar}"></label>
+      <label>Precio de venta manual (opcional)<input name="precio" type="number" step="any" min="0" value="${p.precio||''}"></label>
+    </div>
+    <h3>Preparación</h3>
+    <textarea name="pasos" rows="4" placeholder="Pasos para preparar este postre...">${esc(p.pasos)}</textarea>
+    ${p.id?`<div class="sum">
+      <span>Costo de insumos:</span><b>${m(c.insumos)}</b>
+      <span>Costo total receta:</span><b>${m(c.total)}</b>
+      <span>Costo por porción:</span><b>${m(c.porc)}</b>
+      <span>Precio ideal por porción:</span><b>${m(c.ideal)}</b>
+      <span>Precio cobrado:</span><b>${m(c.precio)}</b>
+      <span>Ganancia por porción:</span><b class="${cls(c.gan)}">${m(c.gan)}</b>
+    </div>`:''}
+    <div class="act">
+      ${p.id?`<button type="button" class="dg" id="delP" data-id="${p.id}">Eliminar postre</button>`:''}
+      <button class="p">Guardar postre</button>
+    </div>
+  </form>`;
+  dlg.showModal();
+  $('#addI').onclick=()=>{const div=document.createElement('div');div.innerHTML=irH({i:S.ins[0]?.id||'',c:100});$('#il').appendChild(div.firstElementChild)};
+  dlg.onclick=e=>{
+    if(e.target.classList.contains('delI'))e.target.closest('.ir').remove();
+    if(e.target.id==='delP'){S.pos=S.pos.filter(x=>x.id!==e.target.dataset.id);save();dlg.close();render()}
+  };
+}
+function irH(r={}){return`<div class="ir"><select>${S.ins.map(i=>`<option value="${i.id}" ${i.id===r.i?'selected':''}>${esc(i.n)} (${i.c}${i.u})</option>`).join('')}</select><input type="number" step="any" min="0" value="${r.c||''}" placeholder="Cant." required><button type="button" class="x delI">✕</button></div>`}
 render();
 </script>
 </body>
